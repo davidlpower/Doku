@@ -1,0 +1,94 @@
+[project]
+name = "doKu"
+version = "0.1.0"
+description = "Solves Sodoku Puzzles"
+readme = "README.md"
+authors = [
+    { name = "davidlpower", email = "david.lpower@gmail.com" }
+]
+requires-python = ">=3.12"
+dependencies = []
+
+[project.scripts]
+fuzzy = "fuzzy.cli:main"
+
+[build-system]
+requires = ["uv_build>=0.11.28,<0.12.0"]
+build-backend = "uv_build"
+
+[dependency-groups]
+dev = [
+    "mypy>=2.2.0",
+    "pytest>=9.1.1",
+    "pytest-cov>=7.1.0",
+    "ruff>=0.15.20",
+]
+
+# ---------------------------------------------------------------------------
+# Ruff — linter + formatter
+# ---------------------------------------------------------------------------
+[tool.ruff]
+line-length = 88
+target-version = "py312"
+src = ["src", "tests"]
+
+[tool.ruff.lint]
+# Explicit `select` pins the enforced set so it doesn't drift across Ruff versions.
+select = [
+    "F",       # pyflakes — undefined names, unused imports
+    "E", "W",  # pycodestyle
+    "I",       # isort — deterministic import order
+    "N",       # pep8-naming
+    "UP",      # pyupgrade — modernize syntax to target-version
+    "B",       # bugbear — likely bugs (mutable defaults, etc.)
+    "C4",      # comprehension correctness
+    "SIM",     # simplifications
+    "RET",     # return-statement hygiene
+    "PTH",     # prefer pathlib over os.path
+    "TC",      # push type-only imports into TYPE_CHECKING
+    "S",       # bandit — security lints
+    "RUF",     # ruff-native rules
+]
+ignore = [
+    "E501",    # line length is the formatter's job
+]
+
+[tool.ruff.lint.per-file-ignores]
+"tests/**" = ["S101"]  # asserts are the point of tests
+
+[tool.ruff.format]
+docstring-code-format = true
+
+# ---------------------------------------------------------------------------
+# pytest + coverage
+# ---------------------------------------------------------------------------
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = [
+    "-ra",                      # report reasons for non-passing tests
+    "--strict-markers",         # unknown marks error instead of silently passing
+    "--strict-config",          # typos in this config error
+    "--import-mode=importlib",  # modern import mode, correct for src layout
+]
+
+[tool.coverage.run]
+source = ["src"]
+branch = true
+
+[tool.coverage.report]
+show_missing = true
+skip_covered = true
+
+# ---------------------------------------------------------------------------
+# mypy — type checker
+# ---------------------------------------------------------------------------
+[tool.mypy]
+python_version = "3.12"
+strict = true
+warn_unreachable = true  # not included in strict; catches dead code
+files = ["src", "tests"]
+
+# Template for later, when you add a dependency with no type stubs:
+# [[tool.mypy.overrides]]
+# module = ["some_untyped_lib.*"]
+# ignore_missing_imports = true
