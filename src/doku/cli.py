@@ -1,20 +1,21 @@
 import argparse
 
-from doku.core import run_puzzle
+from doku.game_io import GameIO
+from doku.grid import Grid
 
 
 def main(argv: list[str] | None = None) -> None:
     parser = argparse.ArgumentParser(
-        prog="fuzzy",
-        description="Makes images fuzzy.",
+        prog="Doku",
+        description="Solves Soduko Puzzles",
     )
-    parser.add_argument("image", help="path to the image to blur")
-    parser.add_argument(
-        "-r",
-        "--radius",
-        type=float,
-        default=2.0,
-        help="blur radius (default: 2.0)",
-    )
+    parser.add_argument("path", help="path to the puzzle to solve")
+
     args = parser.parse_args(argv)
-    run_puzzle(args.image, radius=args.radius)
+
+    game = GameIO()
+
+    puzzle_string = game.load_puzzle_from_file(args.path)
+    grid = Grid(puzzle_string)
+
+    print(grid.matrix)
