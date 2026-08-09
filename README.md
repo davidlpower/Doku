@@ -99,7 +99,7 @@ Based on the techniques actually needed to reach a solution:
 - **Hard** — + X-Wing or similar.
 - **Expert/Extreme** — backtracking required at all.
 
-## Architecture / Module Layout
+## Example Architecture / Module Layout
 
 ```
 sudoku/
@@ -138,12 +138,33 @@ result.backtrack_steps: int  # 0 if pure logic
 ## Tech Stack
 
 - **uv** for environment/dependency management
+```bash
+# Run a script/command inside the project's virtual environment
+uv run python src/doku/io.py
+uv run pytest
+```
 - **Ruff** for linting/formatting
+```bash
+# Lint the project (reports style/error violations)
+uv run ruff check .
+# Check formatting without changing files (useful in CI)
+uv run ruff format --check .
+```
 - **mypy --strict** for typing
+```bash
+# Type-check the whole project in strict mode
+uv run mypy --strict src/
+```
 - **pytest** for testing, including:
   - Unit tests per technique (hand-crafted grids isolating one pattern)
   - Integration tests against known puzzle sets of varying difficulty
   - Property-based tests (optional, via `hypothesis`) — e.g. "solved grid always satisfies all unit constraints"
+
+
+### Possible Pre-Commit 
+```bash
+uv run ruff check . --fix && uv run ruff format . && uv run mypy --strict src/ && uv run pytest
+```
 
 ## Testing / Validation Strategy
 
