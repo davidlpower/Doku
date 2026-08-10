@@ -5,8 +5,8 @@ from doku.grid import Grid
 
 @pytest.fixture
 def standard_valid_incomplete() -> str:
-    """81 Characters — one string of . and int characters"""
-    return ".........4...56.....6...95..4...8....925..8.15..19.4.23...7..9.6.9.....8.8....1.."
+    """81 Characters — one string of int characters"""
+    return "000000000400056000006000950040008000092500801500190402300070090609000008080000100"
 
 @pytest.fixture
 def standard_valid_complete() -> str:
@@ -31,7 +31,22 @@ def test_grid_initalisation(standard_valid_complete: str) -> None:
         (8, 8, 9),
     ],
 )
-def test_extract_given_value_from_puzzle_string(standard_valid_complete: str, row: int, column: int, given_value: int) -> None:
+def test_extract_given_value_from_complete_puzzle_string(standard_valid_complete: str, row: int, column: int, given_value: int) -> None:
     grid = Grid(standard_valid_complete)
+    expected_value = grid.extract_value_from_puzzle_string(row, column)
+    assert  expected_value == given_value
+
+
+@pytest.mark.parametrize(
+    ("row", "column", "given_value"),
+    [
+        (0, 0, 0),
+        (2, 1, 0),
+        (6, 7, 9),
+        (7, 7, 0),
+    ],
+)
+def test_extract_given_value_from_incomplete_puzzle_string(standard_valid_incomplete: str, row: int, column: int, given_value: int) -> None:
+    grid = Grid(standard_valid_incomplete)
     expected_value = grid.extract_value_from_puzzle_string(row, column)
     assert  expected_value == given_value

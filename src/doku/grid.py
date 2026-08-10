@@ -5,8 +5,8 @@ class Grid:
     def __init__(self, puzzle_string):
         w, h = 9, 9
         self.puzzle_string = puzzle_string
-
         self.matrix = []
+
         for row in range(h):
             temp_row = []
             for column in range(w):
