@@ -18,7 +18,20 @@ def test_grid_initalisation(standard_valid_complete: str) -> None:
     assert grid.matrix is not None
 
 @pytest.mark.parametrize(
-    ("row", "column", "given_value"),
+    ("row", "column", "expected"),
+    [
+        (1, 0, 4),
+        (4, 1, 9),
+    ],
+)
+def test_extract_cell_value_from_grid_matrix(standard_valid_incomplete: str, row: int, column: int, expected: int) -> None:
+    grid = Grid(standard_valid_incomplete)
+    actual = grid.extract_value_from_matrix(row,column)
+    assert expected == actual
+
+
+@pytest.mark.parametrize(
+    ("row", "column", "expected"),
     [
         (0, 0, 3),
         (1, 1, 2),
@@ -31,23 +44,37 @@ def test_grid_initalisation(standard_valid_complete: str) -> None:
         (8, 8, 9),
     ],
 )
-def test_extract_given_value_from_complete_puzzle_string(standard_valid_complete: str, row: int, column: int, given_value: int) -> None:
+def test_extract_expected_from_complete_puzzle_string(standard_valid_complete: str, row: int, column: int, expected: int) -> None:
     grid = Grid(standard_valid_complete)
-    expected_value = grid.extract_value_from_puzzle_string(row, column)
-    assert  expected_value == given_value
+    actual = grid.extract_value_from_puzzle_string(row, column)
+    assert  actual == expected
 
 
 @pytest.mark.parametrize(
-    ("row", "column", "given_value"),
+    ("row", "column", "expected"),
     [
         (0, 0, 0),
         (1, 0, 4),
-        (1, 4, 5),
         (6, 7, 9),
         (8, 6, 1),
     ],
 )
-def test_extract_given_value_from_incomplete_puzzle_string(standard_valid_incomplete: str, row: int, column: int, given_value: int) -> None:
+def test_extract_expected_from_incomplete_puzzle_string(standard_valid_incomplete: str, row: int, column: int, expected: int) -> None:
     grid = Grid(standard_valid_incomplete)
-    expected_value = grid.extract_value_from_puzzle_string(row, column)
-    assert  expected_value == given_value
+    actual = grid.extract_value_from_puzzle_string(row, column)
+    assert  actual == expected
+
+
+def test_get_candidates_for_given_column(standard_valid_incomplete: str) -> None:
+    expected = {5,9,7}
+    column = 4
+    grid = Grid(standard_valid_incomplete)
+    actual = grid.get_candidates_for_column(column)
+    assert  actual == expected
+
+def test_get_candidates_for_given_row(standard_valid_incomplete: str) -> None:
+    expected = {3,7,9}
+    row = 6
+    grid = Grid(standard_valid_incomplete)
+    actual = grid.get_candidates_for_row(row)
+    assert  actual == expected
