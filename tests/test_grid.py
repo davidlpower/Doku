@@ -41,9 +41,10 @@ def test_extract_given_value_from_complete_puzzle_string(standard_valid_complete
     ("row", "column", "given_value"),
     [
         (0, 0, 0),
-        (2, 1, 0),
+        (1, 0, 4),
+        (1, 4, 5),
         (6, 7, 9),
-        (7, 7, 0),
+        (8, 6, 1),
     ],
 )
 def test_extract_given_value_from_incomplete_puzzle_string(standard_valid_incomplete: str, row: int, column: int, given_value: int) -> None:
