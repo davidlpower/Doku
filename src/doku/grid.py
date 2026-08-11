@@ -2,7 +2,7 @@ from doku.cell import Cell
 
 
 class Grid:
-    def __init__(self, puzzle_string):
+    def __init__(self, puzzle_string: str) -> None:
         w, h = 9, 9
         self.puzzle_string = puzzle_string
         self.matrix = []
@@ -11,7 +11,7 @@ class Grid:
             temp_row = []
             for column in range(w):
                 value = self.extract_value_from_puzzle_string(row, column)
-                cell = Cell(value, [])
+                cell = Cell(value, set())
                 temp_row.append(cell)
             self.matrix.append(temp_row)
 
