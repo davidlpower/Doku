@@ -82,9 +82,15 @@ def test_get_candidates_for_given_row(standard_valid_incomplete: str) -> None:
 @pytest.mark.parametrize(
     ("row", "column", "expected"),
     [
-        (1, 1, {4,6}),
-        (3, 3, {1,5,8,9}),
-        (7, 7, {1,8,9}),
+        (0, 0, {4,6}),
+        (1, 3, {5,6}),
+        (2, 6, {9,5}),
+        (3, 1, {2,4,5,9}),
+        (4, 4, {1,5,8,9}),
+        (5, 7, {1,2,4,8}),
+        (6, 2, {3,6,8,9}),
+        (7, 5, {7}),
+        (8, 8, {1,8,9}),
     ],
 )
 def test_get_candidates_for_given_box(standard_valid_incomplete: str, row: int, column: int, expected: dict) -> None:

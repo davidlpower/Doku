@@ -46,20 +46,20 @@ class Grid:
 
     def get_candidates_for_box(self, row: int, column: int) -> set[int]:
         boxes = [
-            {"rows": [0,1,2], "cols": [0,1,2]}, {"rows": [0,1,2], "cols": [3,4,5]}, {"rows": [0,1,2], "cols": [6,7,8]},
-            {"rows": [3,4,5], "cols": [0,1,2]}, {"rows": [3,4,5], "cols": [3,4,5]}, {"rows": [3,4,5], "cols": [6,7,8]},
-            {"rows": [6,7,8], "cols": [0,1,2]}, {"rows": [6,7,8], "cols": [3,4,5]}, {"rows": [6,7,8], "cols": [6,7,8]},
+            {"rows": [0,1,2], "columns": [0,1,2]}, {"rows": [0,1,2], "columns": [3,4,5]}, {"rows": [0,1,2], "columns": [6,7,8]},
+            {"rows": [3,4,5], "columns": [0,1,2]}, {"rows": [3,4,5], "columns": [3,4,5]}, {"rows": [3,4,5], "columns": [6,7,8]},
+            {"rows": [6,7,8], "columns": [0,1,2]}, {"rows": [6,7,8], "columns": [3,4,5]}, {"rows": [6,7,8], "columns": [6,7,8]},
         ]
 
-        identified_box = 0
+        identified_box = None
         for index, box in enumerate(boxes):
-            if row in box["rows"] and column in box["cols"]:
+            if row in box["rows"] and column in box["columns"]:
                 identified_box = index
                 break
 
         candidates = set()
         for row in boxes[identified_box]["rows"]:
-            for column in boxes[identified_box]["rows"]:
+            for column in boxes[identified_box]["columns"]:
                 value = self.extract_value_from_puzzle_string(row, column)
                 if value != 0:
                     candidates.add(value)
