@@ -65,18 +65,18 @@ def test_extract_expected_from_incomplete_puzzle_string(standard_valid_incomplet
     assert  actual == expected
 
 
-def test_get_candidates_for_given_column(standard_valid_incomplete: str) -> None:
+def test_get_placed_for_given_column(standard_valid_incomplete: str) -> None:
     expected = {5,9,7}
     column = 4
     grid = Grid(standard_valid_incomplete)
-    actual = grid.get_candidates_for_column(column)
+    actual = grid.get_placed_for_column(column)
     assert  actual == expected
 
-def test_get_candidates_for_given_row(standard_valid_incomplete: str) -> None:
+def test_get_placed_for_given_row(standard_valid_incomplete: str) -> None:
     expected = {3,7,9}
     row = 6
     grid = Grid(standard_valid_incomplete)
-    actual = grid.get_candidates_for_row(row)
+    actual = grid.get_placed_for_row(row)
     assert  actual == expected
 
 @pytest.mark.parametrize(
@@ -93,7 +93,7 @@ def test_get_candidates_for_given_row(standard_valid_incomplete: str) -> None:
         (8, 8, {1,8,9}),
     ],
 )
-def test_get_candidates_for_given_box(standard_valid_incomplete: str, row: int, column: int, expected: dict) -> None:
+def test_get_placed_for_given_box(standard_valid_incomplete: str, row: int, column: int, expected: dict) -> None:
     grid = Grid(standard_valid_incomplete)
-    actual = grid.get_candidates_for_box(row, column)
+    actual = grid.get_placed_for_box(row, column)
     assert  actual == expected

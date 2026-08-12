@@ -26,21 +26,21 @@ class Grid:
         cell = self.matrix[row][column]
         return cell.value
 
-    def _get_candidates(self, cells: Iterable[tuple[int, int]]) -> set[int]:
-        values = set()
+    def _get_placed(self, cells: Iterable[tuple[int, int]]) -> set[int]:
+        placed = set()
         for row, column in cells:
             value = self.extract_value_from_matrix(row, column)
             if value != 0:
-                values.add(value)
-        return values
+                placed.add(value)
+        return placed
 
-    def get_candidates_for_row(self, row: int) -> set[int]:
-        return self._get_candidates((row, column) for column in range(self.w))
+    def get_placed_for_row(self, row: int) -> set[int]:
+        return self._get_placed((row, column) for column in range(self.w))
 
-    def get_candidates_for_column(self, column: int) -> set[int]:
-        return self._get_candidates((row, column) for row in range(self.h))
+    def get_placed_for_column(self, column: int) -> set[int]:
+        return self._get_placed((row, column) for row in range(self.h))
 
-    def get_candidates_for_box(self, row: int, column: int) -> set[int]:
+    def get_placed_for_box(self, row: int, column: int) -> set[int]:
         boxes = [
             {"rows": [0,1,2], "columns": [0,1,2]}, {"rows": [0,1,2], "columns": [3,4,5]}, {"rows": [0,1,2], "columns": [6,7,8]},
             {"rows": [3,4,5], "columns": [0,1,2]}, {"rows": [3,4,5], "columns": [3,4,5]}, {"rows": [3,4,5], "columns": [6,7,8]},
@@ -53,15 +53,15 @@ class Grid:
                 identified_box = index
                 break
 
-        candidates = set()
+        placed = set()
         for row in boxes[identified_box]["rows"]:
             for column in boxes[identified_box]["columns"]:
                 value = self.extract_value_from_puzzle_string(row, column)
                 if value != 0:
-                    candidates.add(value)
+                    placed.add(value)
 
-        return candidates
+        return placed
 
 
 # Jobs to be done
-
+# write a method that retur
