@@ -78,3 +78,16 @@ def test_get_candidates_for_given_row(standard_valid_incomplete: str) -> None:
     grid = Grid(standard_valid_incomplete)
     actual = grid.get_candidates_for_row(row)
     assert  actual == expected
+
+@pytest.mark.parametrize(
+    ("row", "column", "expected"),
+    [
+        (1, 1, {4,6}),
+        (3, 3, {1,5,8,9}),
+        (7, 7, {1,8,9}),
+    ],
+)
+def test_get_candidates_for_given_box(standard_valid_incomplete: str, row: int, column: int, expected: dict) -> None:
+    grid = Grid(standard_valid_incomplete)
+    actual = grid.get_candidates_for_box(row, column)
+    assert  actual == expected

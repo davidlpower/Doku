@@ -44,18 +44,28 @@ class Grid:
 
         return candidates
 
-    def get_candidates_for_box(self, row: int) -> set[int]:
-        box1 = {"row": [0,1,2], "cols": [0,1,2]}
-        box2 = {"row": [0,1,2], "cols": [3,4,5]}
-        box3 = {"row": [0,1,2], "cols": [6,7,8]}
+    def get_candidates_for_box(self, row: int, column: int) -> set[int]:
+        boxes = [
+            {"rows": [0,1,2], "cols": [0,1,2]}, {"rows": [0,1,2], "cols": [3,4,5]}, {"rows": [0,1,2], "cols": [6,7,8]},
+            {"rows": [3,4,5], "cols": [0,1,2]}, {"rows": [3,4,5], "cols": [3,4,5]}, {"rows": [3,4,5], "cols": [6,7,8]},
+            {"rows": [6,7,8], "cols": [0,1,2]}, {"rows": [6,7,8], "cols": [3,4,5]}, {"rows": [6,7,8], "cols": [6,7,8]},
+        ]
 
-        box4 = {"row": [3,4,5], "cols": [0,1,2]}
-        box5 = {"row": [3,4,5], "cols": [3,4,5]}
-        box6 = {"row": [3,4,5], "cols": [6,7,8]}
+        identified_box = 0
+        for index, box in enumerate(boxes):
+            if row in box["rows"] and column in box["cols"]:
+                identified_box = index
+                break
 
-        box7 = {"row": [6,7,8], "cols": [0,1,2]}
-        box8 = {"row": [6,7,8], "cols": [3,4,5]}
-        box9 = {"row": [6,7,8], "cols": [6,7,8]}
+        candidates = set()
+        for row in boxes[identified_box]["rows"]:
+            for column in boxes[identified_box]["rows"]:
+                value = self.extract_value_from_puzzle_string(row, column)
+                if value != 0:
+                    candidates.add(value)
+
+        return candidates
+
 
 # Jobs to be done
 # - write a method to calculdate the possible candidates for a given cell
