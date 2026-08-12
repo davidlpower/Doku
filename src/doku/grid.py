@@ -1,3 +1,5 @@
+from collections.abc import Iterable
+
 from doku.cell import Cell
 
 
@@ -24,25 +26,19 @@ class Grid:
         cell = self.matrix[row][column]
         return cell.value
 
-    def get_candidates_for_column(self, column: int) -> set[int]:
-        candidates = set()
-
-        for row in range(self.w):
+    def _get_candidates(self, cells: Iterable[tuple[int, int]]) -> set[int]:
+        values = set()
+        for row, column in cells:
             value = self.extract_value_from_matrix(row, column)
             if value != 0:
-                candidates.add(value)
-
-        return candidates
+                values.add(value)
+        return values
 
     def get_candidates_for_row(self, row: int) -> set[int]:
-        candidates = set()
+        return self._get_candidates((row, column) for column in range(self.w))
 
-        for column in range(self.w):
-            value = self.extract_value_from_matrix(row, column)
-            if value != 0:
-                candidates.add(value)
-
-        return candidates
+    def get_candidates_for_column(self, column: int) -> set[int]:
+        return self._get_candidates((row, column) for row in range(self.h))
 
     def get_candidates_for_box(self, row: int, column: int) -> set[int]:
         boxes = [
@@ -68,6 +64,4 @@ class Grid:
 
 
 # Jobs to be done
-# - write a method to calculdate the possible candidates for a given cell
-# - for Box, Row and Column
-# - write a test that validates the candidates are correctly calculated
+
