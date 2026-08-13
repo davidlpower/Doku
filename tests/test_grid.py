@@ -13,10 +13,6 @@ def standard_valid_complete() -> str:
     """81 Characters — one string of int characters"""
     return "316578492529134768487629531263415987974863125851792643138947256692351874745286319"
 
-def test_grid_initalisation(standard_valid_complete: str) -> None:
-    grid = Grid(standard_valid_complete)
-    assert grid.matrix is not None
-
 @pytest.mark.parametrize(
     ("row", "column", "expected"),
     [
@@ -24,11 +20,10 @@ def test_grid_initalisation(standard_valid_complete: str) -> None:
         (4, 1, 9),
     ],
 )
-def test_extract_cell_value_from_grid_matrix(standard_valid_incomplete: str, row: int, column: int, expected: int) -> None:
+def test_get_cell_value_from_grid_matrix(standard_valid_incomplete: str, row: int, column: int, expected: int) -> None:
     grid = Grid(standard_valid_incomplete)
-    actual = grid.extract_value_from_matrix(row,column)
+    actual = grid.get_value_from_matrix(row,column)
     assert expected == actual
-
 
 @pytest.mark.parametrize(
     ("row", "column", "expected"),
@@ -44,9 +39,9 @@ def test_extract_cell_value_from_grid_matrix(standard_valid_incomplete: str, row
         (8, 8, 9),
     ],
 )
-def test_extract_expected_from_complete_puzzle_string(standard_valid_complete: str, row: int, column: int, expected: int) -> None:
+def test_get_expected_from_complete_puzzle_string(standard_valid_complete: str, row: int, column: int, expected: int) -> None:
     grid = Grid(standard_valid_complete)
-    actual = grid.extract_value_from_puzzle_string(row, column)
+    actual = grid.get_value_from_puzzle_string(row, column)
     assert  actual == expected
 
 
@@ -59,9 +54,9 @@ def test_extract_expected_from_complete_puzzle_string(standard_valid_complete: s
         (8, 6, 1),
     ],
 )
-def test_extract_expected_from_incomplete_puzzle_string(standard_valid_incomplete: str, row: int, column: int, expected: int) -> None:
+def test_get_expected_from_incomplete_puzzle_string(standard_valid_incomplete: str, row: int, column: int, expected: int) -> None:
     grid = Grid(standard_valid_incomplete)
-    actual = grid.extract_value_from_puzzle_string(row, column)
+    actual = grid.get_value_from_puzzle_string(row, column)
     assert  actual == expected
 
 
@@ -97,3 +92,13 @@ def test_get_placed_for_given_box(standard_valid_incomplete: str, row: int, colu
     grid = Grid(standard_valid_incomplete)
     actual = grid.get_placed_for_box(row, column)
     assert  actual == expected
+
+def test_update_candidates_for_cell(standard_valid_incomplete) -> None:
+    given_row = 3
+    given_column = 0
+    expected_candidates = {1,7}
+
+    grid = Grid(standard_valid_incomplete)
+    actural_candidates = grid.get_candidates_for_cell(given_row, given_column)
+
+    assert actural_candidates == expected_candidates

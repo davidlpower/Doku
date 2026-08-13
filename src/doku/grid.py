@@ -9,27 +9,37 @@ class Grid:
         self.puzzle_string = puzzle_string
         self.matrix = []
 
+        # populate matrix
         for row in range(self.h):
             temp_row = []
             for column in range(self.w):
-                value = self.extract_value_from_puzzle_string(row, column)
+                value = self.get_value_from_puzzle_string(row, column)
                 cell = Cell(value, set(), row, column)
                 temp_row.append(cell)
             self.matrix.append(temp_row)
 
-    def extract_value_from_puzzle_string(self, row: int, column: int) -> int:
+        # populate candidatess
+        for row in range(self.h):
+            for column in range(self.w):
+                candidates = self.get_candidates_for_cell(row, column)
+                self.set_value_from_matrix(row, column, candidates)
+
+    def get_value_from_puzzle_string(self, row: int, column: int) -> int:
         row_starts = [0, 9, 18, 27, 36, 45, 54, 63, 72]
         index = row_starts[row] + column
         return int(self.puzzle_string[index])
 
-    def extract_value_from_matrix(self, row: int, column: int) -> int:
+    def get_value_from_matrix(self, row: int, column: int) -> int:
         cell = self.matrix[row][column]
         return cell.value
+
+    def set_value_from_matrix(self, row: int, column: int, candidates: set[int]) -> None:
+        self.matrix[row][column].candidates = candidates
 
     def _get_placed(self, cells: Iterable[tuple[int, int]]) -> set[int]:
         placed = set()
         for row, column in cells:
-            value = self.extract_value_from_matrix(row, column)
+            value = self.get_value_from_matrix(row, column)
             if value != 0:
                 placed.add(value)
         return placed
@@ -53,15 +63,29 @@ class Grid:
                 identified_box = index
                 break
 
+        if identified_box is None:
+            raise ValueError(f"No box found for row={row}, column={column}")
+
         placed = set()
         for row in boxes[identified_box]["rows"]:
             for column in boxes[identified_box]["columns"]:
-                value = self.extract_value_from_puzzle_string(row, column)
+                value = self.get_value_from_puzzle_string(row, column)
                 if value != 0:
                     placed.add(value)
 
         return placed
 
+    def get_candidates_for_cell(self, row:int, column: int) -> set[int]:
+        all_candidates = {1,2,3,4,5,6,7,8,9}
+
+        values = (
+            self.get_placed_for_row(row) |
+            self.get_placed_for_column(column) |
+            self.get_placed_for_box(row, column)
+        )
+
+        return all_candidates - values
 
 # Jobs to be done
-# write a method that retur
+# Write update method to get candidates for a single cell
+# Write a update method that updates all candidates for all cells (refresh)
