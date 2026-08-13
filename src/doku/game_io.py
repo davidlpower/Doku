@@ -1,4 +1,3 @@
-
 class GameIO:
     def load_puzzle_from_file(self, file_path: str) -> str:
         with open(file_path, "r") as f:

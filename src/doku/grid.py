@@ -52,9 +52,15 @@ class Grid:
 
     def get_placed_for_box(self, row: int, column: int) -> set[int]:
         boxes = [
-            {"rows": [0,1,2], "columns": [0,1,2]}, {"rows": [0,1,2], "columns": [3,4,5]}, {"rows": [0,1,2], "columns": [6,7,8]},
-            {"rows": [3,4,5], "columns": [0,1,2]}, {"rows": [3,4,5], "columns": [3,4,5]}, {"rows": [3,4,5], "columns": [6,7,8]},
-            {"rows": [6,7,8], "columns": [0,1,2]}, {"rows": [6,7,8], "columns": [3,4,5]}, {"rows": [6,7,8], "columns": [6,7,8]},
+            {"rows": [0, 1, 2], "columns": [0, 1, 2]},
+            {"rows": [0, 1, 2], "columns": [3, 4, 5]},
+            {"rows": [0, 1, 2], "columns": [6, 7, 8]},
+            {"rows": [3, 4, 5], "columns": [0, 1, 2]},
+            {"rows": [3, 4, 5], "columns": [3, 4, 5]},
+            {"rows": [3, 4, 5], "columns": [6, 7, 8]},
+            {"rows": [6, 7, 8], "columns": [0, 1, 2]},
+            {"rows": [6, 7, 8], "columns": [3, 4, 5]},
+            {"rows": [6, 7, 8], "columns": [6, 7, 8]},
         ]
 
         identified_box = None
@@ -75,16 +81,13 @@ class Grid:
 
         return placed
 
-    def get_candidates_for_cell(self, row:int, column: int) -> set[int]:
-        all_candidates = {1,2,3,4,5,6,7,8,9}
+    def get_candidates_for_cell(self, row: int, column: int) -> set[int]:
+        all_candidates = {1, 2, 3, 4, 5, 6, 7, 8, 9}
 
-        values = (
-            self.get_placed_for_row(row) |
-            self.get_placed_for_column(column) |
-            self.get_placed_for_box(row, column)
-        )
+        values = self.get_placed_for_row(row) | self.get_placed_for_column(column) | self.get_placed_for_box(row, column)
 
         return all_candidates - values
+
 
 # Jobs to be done
 # Write update method to get candidates for a single cell
