@@ -184,6 +184,8 @@ uv run ruff check . --fix && uv run ruff format . && uv run mypy --strict src/ &
 
 # Techniques:
 
+Types of Techniques
+
 ## Place a value directly
 
 - Naked singles - cell has one candidate left → fill it in.
@@ -200,3 +202,11 @@ uv run ruff check . --fix && uv run ruff format . && uv run mypy --strict src/ &
 - Simple coloring / X-Cycles
 - XY-Wing / XYZ-Wing
 - AIC
+
+All of these only strip candidates from cells' candidate sets. They never directly solve a cell. They work indirectly: by eliminating enough candidates, they can create a new naked or hidden single, which is what actually places the value on the next loop.
+
+# Solver logic
+- Scan the whole board for naked singles (any cell, no unit needed), place any found.
+- If none found, scan unit by unit (each row, each column, each box) for hidden singles, place any found.
+- If a value was placed in step 1 or 2, go back to step 1 and repeat, since the new placement will have removed that value from other cells' candidate lists and may have created new singles.
+- If neither step finds anything, escalate to the next technique (pairs/triples, etc.).

@@ -3,8 +3,8 @@ from pathlib import Path
 
 class GameIO:
     def load_puzzle_from_file(self, file_path: str) -> str:
-        p = Path.open(file_path)
-        with p as f:
+        p = Path(file_path)
+        with p.open() as f:
             puzzle_string = f.read()
             if self.validate_puzzle(puzzle_string):
                 return puzzle_string

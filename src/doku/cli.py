@@ -16,3 +16,5 @@ def main(argv: list[str] | None = None) -> None:
     puzzle_string = game.load_puzzle_from_file(args.path)
     grid = Grid(puzzle_string)
 
+    # Create instance of value solver and Add it to value array
+    # 
