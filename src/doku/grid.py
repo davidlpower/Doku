@@ -87,8 +87,3 @@ class Grid:
         values = self.get_placed_for_row(row) | self.get_placed_for_column(column) | self.get_placed_for_box(row, column)
 
         return all_candidates - values
-
-
-# Jobs to be done
-# Write update method to get candidates for a single cell
-# Write a update method that updates all candidates for all cells (refresh)
