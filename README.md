@@ -182,7 +182,21 @@ uv run ruff check . --fix && uv run ruff format . && uv run mypy --strict src/ &
 5. **M5 — CLI polish + benchmark suite**: usable tool, performance baseline established.
 6. **(Future) M6 — Puzzle generation**: reuse solver for uniqueness-checking during generation.
 
-## Open Questions
+# Techniques:
 
-- How far to push technique coverage before backtracking is "good enough" (diminishing returns on rarer techniques like Swordfish/XY-Wing).
-- Whether to support alternate puzzle sizes (4×4, 16×16) in the core data model now, even if unused in v1, to ease future extension.
+## Place a value directly
+
+- Naked singles - cell has one candidate left → fill it in.
+- Hidden singles - candidate has one legal cell in a unit → fill it in.
+- Backtracking - guesses a value into a cell (then propagates/backtracks on contradiction).
+
+## Only narrow candidates (never place a value directly)
+
+- Naked pairs/triples
+- Hidden pairs/triples
+- Pointing pairs/triples (box-line reduction)
+- X-Wing
+- Swordfish/Jellyfish
+- Simple coloring / X-Cycles
+- XY-Wing / XYZ-Wing
+- AIC
