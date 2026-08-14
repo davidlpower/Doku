@@ -122,10 +122,6 @@ sudoku/
     pairs_triples.py
     pointing.py
     fish.py           # X-Wing, Swordfish
-  propagate.py        # runs Stage 1 loop, aggregates techniques
-  backtrack.py         # Stage 2 search
-  solver.py            # public API: solve(grid) -> Solution
-  rating.py             # Stage 3 difficulty scoring
   cli.py                 # command-line entry point
 tests/
   fixtures/               # puzzles by known difficulty, for regression

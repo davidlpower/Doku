@@ -2,6 +2,7 @@ import argparse
 
 from doku.game_io import GameIO
 from doku.grid import Grid
+from doku.techniques.naked_single import NakedSingle
 
 
 def main(argv: list[str] | None = None) -> None:
@@ -16,17 +17,63 @@ def main(argv: list[str] | None = None) -> None:
     puzzle_string = game.load_puzzle_from_file(args.path)
     grid = Grid(puzzle_string)
 
-    # Create instances of value Techniques
-    # Create instances of candidate Techniques
-    # Create Techniques array and populate
+    techniques = [NakedSingle()]
 
-    # Loop Until the puzzle is solved.
-        # loop over the techniques
-        # Do technique on Cell
-            # did it change anything
-                # yes - continue
-                # no  - move on
-        # No Progress - logic stuck?
-            # backtrack on cell with fewest candiates
-    # Puzzle solved?
+    # stack holds grid "branches" to try. Starts with just the original grid.
+    # Backtracking guesses get pushed here as new branches to explore later.
+    stack = [grid]
+    solved_grid = None
 
+    # Keep taking branches off the stack until one solves, or we run out.
+    while stack:
+        grid = stack.pop()
+
+        # Apply logic techniques repeatedly until none of them can make
+        # any further progress on this grid (a "fixed point").
+        while True:
+            progress = False
+            for technique in techniques:
+                changed, grid = technique.apply(grid)
+                if changed:
+                    # Something changed - restart from the first technique,
+                    # since earlier techniques may now apply again.
+                    progress = True
+                    break
+                # This technique found nothing - try the next one.
+
+            # A full pass over all techniques changed nothing: logic has
+            # stalled (not necessarily solved, not necessarily wrong).
+            if not progress:
+                break
+
+        if grid.has_contradiction():
+            # This branch's guesses led somewhere impossible (e.g. a cell
+            # with zero candidates left). Abandon it and try the next
+            # branch on the stack.
+            continue
+
+        if grid.is_solved():
+            # Logic alone (possibly plus earlier guesses) finished the
+            # puzzle. Stop entirely - no need to check remaining branches.
+            solved_grid = grid
+            break
+
+        # Logic stalled but the grid isn't solved or contradictory yet -
+        # we have to guess. Pick the emptiest-looking cell (fewest
+        # candidates) to minimise how many guesses we branch into.
+        cell = min(
+            (c for c in grid.cells if c.value == 0),
+            key=lambda c: len(c.candidates),
+        )
+        # Push one new branch per possible value for that cell. These
+        # get popped and processed (logic techniques + further guessing)
+        # in later iterations of the outer while loop.
+        for guess in cell.candidates:
+            new_grid = grid.copy()
+            new_grid.place(cell, guess)
+            stack.append(new_grid)
+
+    if solved_grid is not None:
+        print(solved_grid)
+    else:
+        print("No solution found.")

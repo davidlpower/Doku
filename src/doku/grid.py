@@ -8,6 +8,7 @@ class Grid:
         self.w, self.h = 9, 9
         self.puzzle_string = puzzle_string
         self.matrix = []
+        self.all_candidates = {1, 2, 3, 4, 5, 6, 7, 8, 9}
 
         # populate matrix
         for row in range(self.h):
@@ -85,11 +86,9 @@ class Grid:
         return placed
 
     def get_candidates_for_cell(self, row: int, column: int) -> set[int]:
-        all_candidates = {1, 2, 3, 4, 5, 6, 7, 8, 9}
-
         values = self.get_placed_for_row(row) | self.get_placed_for_column(column) | self.get_placed_for_box(row, column)
 
-        return all_candidates - values
+        return self.all_candidates - values
 
     def get_cell_with_least_candidates(self) -> tuple[int, int]:
         cell_row = 0
@@ -104,3 +103,11 @@ class Grid:
                     cell_column = column
 
         return (cell_row, cell_column)
+
+    def is_solved(self) -> bool:
+        all_values = []
+        for row in range(self.h):
+            for column in range(self.w):
+                if self.get_cell_value(row, column) != 0:
+                    all_values.append(self.get_cell_value(row, column))
+        return len(all_values) == 81
