@@ -118,14 +118,16 @@ def test_get_cell_with_least_candidates(standard_valid_incomplete) -> None:
 
     assert actural_row_column == expected_row_column
 
+
 def test_puzzle_with_empty_cells_is_not_solved(standard_valid_incomplete) -> None:
-        grid = Grid(standard_valid_incomplete)
-        expected = False
-        actual = grid.is_solved()
-        assert actual == expected
+    grid = Grid(standard_valid_incomplete)
+    expected = False
+    actual = grid.is_solved()
+    assert actual == expected
+
 
 def test_puzzle_with_no_empty_cells_is_not_solved(standard_valid_complete) -> None:
-        grid = Grid(standard_valid_complete)
-        expected = True
-        actual = grid.is_solved()
-        assert actual == expected
+    grid = Grid(standard_valid_complete)
+    expected = True
+    actual = grid.is_solved()
+    assert actual == expected
