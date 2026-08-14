@@ -6,4 +6,12 @@ class NakedSingle(Technique):
     name = "Naked Single"
 
     def apply(self, grid: Grid) -> tuple[bool, Grid]:
-        return (True, grid)
+        # Loop over every cell
+        changed = False
+        for row in range(grid.h):
+            for column in range(grid.w):
+                candidates = grid.get_candidates_for_cell(row, column)
+                if len(candidates) == 1:
+                    grid.set_cell_value(row, column, candidates)
+                    changed = True
+        return (changed, grid)
