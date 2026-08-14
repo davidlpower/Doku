@@ -78,8 +78,6 @@ Applied repeatedly, in increasing order of complexity, until no technique makes 
 5. X-Wing
 6. (Stretch) Swordfish, XY-Wing
 
-Each technique is a pure function: `Grid -> (Grid, bool progress_made, TechniqueLog)`.
-
 ### Stage 2 — Backtracking Search
 
 Triggered only if Stage 1 stalls with the puzzle unsolved:
@@ -134,7 +132,7 @@ result.backtrack_steps: int  # 0 if pure logic
 - **uv** for environment/dependency management
 ```bash
 # Run a script/command inside the project's virtual environment
-uv run python src/doku/io.py
+uv run python src/doku/game_io.py
 uv run pytest
 ```
 - **Ruff** for linting/formatting
@@ -174,7 +172,6 @@ uv run ruff check . --fix && uv run ruff format . && uv run mypy --strict src/ &
 3. **M3 — Pairs/triples + pointing pairs**: reduces reliance on backtracking for medium puzzles.
 4. **M4 — X-Wing and difficulty rating**: solves hard puzzles logically; rating output.
 5. **M5 — CLI polish + benchmark suite**: usable tool, performance baseline established.
-6. **(Future) M6 — Puzzle generation**: reuse solver for uniqueness-checking during generation.
 
 # Techniques:
 
