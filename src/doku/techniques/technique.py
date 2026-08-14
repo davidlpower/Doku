@@ -9,4 +9,3 @@ class Technique(ABC):
     @abstractmethod
     def apply(self, grid: Grid) -> tuple[bool, Grid]:
         """Apply once; return True if it changed anything."""
-        
