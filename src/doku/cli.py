@@ -63,7 +63,7 @@ def main(argv: list[str] | None = None) -> None:
         # we have to guess. Pick the emptiest-looking cell (fewest
         # candidates) to minimise how many guesses we branch into.
         cell = min(
-            (c for c in grid.matrix if c.value == 0),
+            (c for c in grid.cells if c.value == 0),
             key=lambda c: len(c.candidates),
         )
         # Push one new branch per possible value for that cell. These

@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 
-from ..grid import Grid
+from doku.grid import Grid
 
 
 class Technique(ABC):
@@ -9,3 +9,4 @@ class Technique(ABC):
     @abstractmethod
     def apply(self, grid: Grid) -> tuple[bool, Grid]:
         """Apply once; return True if it changed anything."""
+        
