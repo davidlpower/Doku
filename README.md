@@ -190,7 +190,7 @@ Types of Techniques
 
 - Naked singles - cell has one candidate left → fill it in.
 - Hidden singles - candidate has one legal cell in a unit → fill it in.
-- Backtracking - guesses a value into a cell (then propagates/backtracks on contradiction).
+- Backtracking - guesses a value into a cell with the fewest candidates (then propagates/backtracks on contradiction).
 
 ## Only narrow candidates (never place a value directly)
 
@@ -203,7 +203,7 @@ Types of Techniques
 - XY-Wing / XYZ-Wing
 - AIC
 
-All of these only strip candidates from cells' candidate sets. They never directly solve a cell. They work indirectly: by eliminating enough candidates, they can create a new naked or hidden single, which is what actually places the value on the next loop.
+All of these only eliminate candidates from the cells candidate sets. They never directly solve a cell. They work indirectly: by eliminating enough candidates, they can create a new naked or hidden single, which is what actually places the value on the next loop.
 
 # Solver logic
 - Scan the whole board for naked singles (any cell, no unit needed), place any found.
