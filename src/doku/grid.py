@@ -111,3 +111,7 @@ class Grid:
                 if self.get_cell_value(row, column) != 0:
                     all_values.append(self.get_cell_value(row, column))
         return len(all_values) == 81
+
+    def is_valid(self) -> bool:
+        """ToDo"""
+        return True
