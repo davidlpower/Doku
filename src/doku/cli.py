@@ -1,4 +1,5 @@
 import argparse
+import copy
 
 from doku.game_io import GameIO
 from doku.grid import Grid
@@ -29,7 +30,7 @@ def main(argv: list[str] | None = None) -> None:
         grid = stack.pop()
 
         # Apply logic techniques repeatedly until none of them can make
-        # any further progress on this grid (a "fixed point").
+        # any further progress on this grid
         while True:
             progress = False
             for technique in techniques:
@@ -46,7 +47,7 @@ def main(argv: list[str] | None = None) -> None:
             if not progress:
                 break
 
-        if grid.has_contradiction():
+        if grid.is_invalid():
             # This branch's guesses led somewhere impossible (e.g. a cell
             # with zero candidates left). Abandon it and try the next
             # branch on the stack.
@@ -62,15 +63,15 @@ def main(argv: list[str] | None = None) -> None:
         # we have to guess. Pick the emptiest-looking cell (fewest
         # candidates) to minimise how many guesses we branch into.
         cell = min(
-            (c for c in grid.cells if c.value == 0),
+            (c for c in grid.matrix if c.value == 0),
             key=lambda c: len(c.candidates),
         )
         # Push one new branch per possible value for that cell. These
         # get popped and processed (logic techniques + further guessing)
         # in later iterations of the outer while loop.
         for guess in cell.candidates:
-            new_grid = grid.copy()
-            new_grid.place(cell, guess)
+            new_grid = copy.deepcopy(grid)
+            new_grid.set_cell_value(cell.row, cell.column, guess)
             stack.append(new_grid)
 
     if solved_grid is not None:

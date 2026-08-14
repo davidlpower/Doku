@@ -5,5 +5,5 @@ from doku.techniques.technique import Technique
 class NakedSingle(Technique):
     name = "Naked Single"
 
-    def apply(self, grid: Grid) -> bool:
-        return True
+    def apply(self, grid: Grid) -> tuple[bool, Grid]:
+        return (True, grid)

@@ -63,20 +63,6 @@ Key points:
 
 Each of the 81 cells is represented as a single `Cell` object holding both its value and its candidate set, rather than two parallel 9×9 arrays:
 
-```python
-@dataclass
-class Cell:
-    value: int | None = None
-    candidates: set[int] = field(default_factory=lambda: set(range(1, 10)))
-    is_given: bool = False  # part of the original puzzle, immutable
-```
-
-Reasoning:
-
-- **Data integrity.** A single object per cell makes it impossible for `value` and `candidates` to silently fall out of sync, which is easy to happen with two parallel arrays (e.g. updating one and forgetting the other).
-- **Ergonomics for techniques.** Every technique reads and mutates cell state — a clean `Cell` API keeps that code simple and consistent across all technique implementations, rather than juggling coordinate-aligned arrays.
-- **Extensibility.** `is_given` distinguishes original clues from solver-placed digits (needed so the solver never overwrites a clue, and useful later for puzzle generation). The object also gives a natural home for future metadata, like which technique solved a given cell (for difficulty rating/logging).
-
 A `Grid.place(row, col, digit)` method is planned to handle placement atomically: set the value, clear that cell's candidates, and remove `digit` from the candidate sets of all peer cells (same row/column/box) in one step — keeping the "candidates always reflect current constraints" invariant automatically true after every placement.
 
 ## Solving Pipeline

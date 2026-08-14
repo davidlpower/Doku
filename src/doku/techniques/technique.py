@@ -7,5 +7,5 @@ class Technique(ABC):
     name: str
 
     @abstractmethod
-    def apply(self, grid: Grid) -> bool:
+    def apply(self, grid: Grid) -> tuple[bool, Grid]:
         """Apply once; return True if it changed anything."""
