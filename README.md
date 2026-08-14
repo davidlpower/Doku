@@ -18,24 +18,36 @@ A Python library and CLI tool for solving classic 9×9 Sudoku puzzles using a **
 
 ## How Solving Works
 
-A common misconception is that the solver picks a cell first and then chooses a technique to solve it. It doesn't — most techniques scan the **whole grid** for any place they apply, rather than targeting one pre-chosen cell.
-
 ```
-loop:
-    progress = false
-    for technique in [naked_singles, hidden_singles, naked_pairs, pointing_pairs, x_wing, ...]:
-        result = technique.apply(grid)   # scans ALL cells/units, not one cell
-        if result made any change (filled a cell OR eliminated a candidate):
-            grid = result
-            progress = true
-            break   # restart from the simplest technique again
-    if not progress:
-        break   # logic has stalled
+def solve(grid: Grid) -> Grid | None:
+    stack = [grid]
 
-if grid is fully solved:
-    declare solved
-else:
-    run backtracking(grid)   # only now do we start "guessing" on a chosen cell
+    while stack:
+        grid = stack.pop()
+
+        while True:
+            progress = False
+            for technique in TECHNIQUES:
+                changed, grid = technique.apply(grid)
+                if changed:
+                    progress = True
+                    break
+            if not progress:
+                break
+
+        if grid.has_contradiction():
+            continue  # dead end, try next item on stack
+
+        if grid.is_solved():
+            return grid
+
+        cell = pick_cell_to_guess(grid)
+        for guess in cell.candidates:
+            new_grid = grid.copy()
+            new_grid.place(cell, guess)
+            stack.append(new_grid)
+
+    return None  # stack exhausted, no solution
 ```
 
 Key points:

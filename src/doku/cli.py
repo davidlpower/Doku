@@ -16,4 +16,17 @@ def main(argv: list[str] | None = None) -> None:
     puzzle_string = game.load_puzzle_from_file(args.path)
     grid = Grid(puzzle_string)
 
-    # Create instance of value solver and Add it to value array
+    # Create instances of value Techniques
+    # Create instances of candidate Techniques
+    # Create Techniques array and populate
+
+    # Loop Until the puzzle is solved.
+        # loop over the techniques
+        # Do technique on Cell
+            # did it change anything
+                # yes - continue
+                # no  - move on
+        # No Progress - logic stuck?
+            # backtrack on cell with fewest candiates
+    # Puzzle solved?
+

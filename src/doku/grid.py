@@ -34,7 +34,7 @@ class Grid:
         return cell.value
 
     def set_cell_value(self, row: int, column: int, value: int) -> None:
-        self.matrix[row][column].cell.value = value
+        self.matrix[row][column].value = value
 
     def set_candidates_for_cell(self, row: int, column: int, candidates: set[int]) -> None:
         self.matrix[row][column].candidates = candidates
@@ -91,7 +91,7 @@ class Grid:
 
         return all_candidates - values
 
-    def get_cell_with_least_candidates(self) -> (int, int):
+    def get_cell_with_least_candidates(self) -> tuple[int, int]:
         cell_row = 0
         cell_column = 0
         smallest_no_candidates = 10
