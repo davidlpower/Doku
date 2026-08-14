@@ -17,4 +17,3 @@ def main(argv: list[str] | None = None) -> None:
     grid = Grid(puzzle_string)
 
     # Create instance of value solver and Add it to value array
-    # 

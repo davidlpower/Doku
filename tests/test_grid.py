@@ -24,7 +24,7 @@ def standard_valid_complete() -> str:
 )
 def test_get_cell_value_from_grid_matrix(standard_valid_incomplete: str, row: int, column: int, expected: int) -> None:
     grid = Grid(standard_valid_incomplete)
-    actual = grid.get_value_from_matrix(row, column)
+    actual = grid.get_cell_value(row, column)
     assert expected == actual
 
 
@@ -108,3 +108,12 @@ def test_update_candidates_for_cell(standard_valid_incomplete) -> None:
     actural_candidates = grid.get_candidates_for_cell(given_row, given_column)
 
     assert actural_candidates == expected_candidates
+
+
+def test_get_cell_with_least_candidates(standard_valid_incomplete) -> None:
+    expected_row_column = (4, 0)
+
+    grid = Grid(standard_valid_incomplete)
+    actural_row_column = grid.get_cell_with_least_candidates()
+
+    assert actural_row_column == expected_row_column
