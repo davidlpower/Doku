@@ -12,6 +12,7 @@ class NakedSingle(Technique):
             for column in range(grid.w):
                 candidates = grid.get_candidates_for_cell(row, column)
                 if len(candidates) == 1:
-                    grid.set_cell_value(row, column, candidates)
+                    (value,) = candidates
+                    grid.set_cell_value(row, column, value)
                     changed = True
         return (changed, grid)

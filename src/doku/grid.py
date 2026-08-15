@@ -19,7 +19,7 @@ class Grid:
                 temp_row.append(cell)
             self.matrix.append(temp_row)
 
-        # populate candidatess
+        # populate candidates
         for row in range(self.h):
             for column in range(self.w):
                 candidates = self.get_candidates_for_cell(row, column)
@@ -39,6 +39,13 @@ class Grid:
 
     def set_candidates_for_cell(self, row: int, column: int, candidates: set[int]) -> None:
         self.matrix[row][column].candidates = candidates
+
+    def get_matrix_as_puzzle_string(self) -> str:
+        puzzle_string = ""
+        for row in range(self.h):
+            for column in range(self.w):
+                puzzle_string += str(self.get_cell_value(row, column))
+        return puzzle_string
 
     def _get_placed(self, cells: Iterable[tuple[int, int]]) -> set[int]:
         placed = set()
@@ -112,6 +119,6 @@ class Grid:
                     all_values.append(self.get_cell_value(row, column))
         return len(all_values) == 81
 
-    def is_valid(self) -> bool:
+    def is_invalid(self) -> bool:
         """ToDo"""
-        return True
+        return False

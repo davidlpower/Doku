@@ -132,7 +132,7 @@ result.backtrack_steps: int  # 0 if pure logic
 - **uv** for environment/dependency management
 ```bash
 # Run a script/command inside the project's virtual environment
-uv run python src/doku/game_io.py
+uv run doku ./tests/fixtures/sample1.txt
 uv run pytest
 ```
 - **Ruff** for linting/formatting

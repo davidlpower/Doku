@@ -131,3 +131,9 @@ def test_puzzle_with_no_empty_cells_is_not_solved(standard_valid_complete) -> No
     expected = True
     actual = grid.is_solved()
     assert actual == expected
+
+
+def test_exported_puzzle_string_matches_given(standard_valid_incomplete) -> None:
+    grid = Grid(standard_valid_incomplete)
+    actual = grid.get_matrix_as_puzzle_string()
+    assert actual == standard_valid_incomplete
