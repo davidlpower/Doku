@@ -41,7 +41,7 @@ class Grid:
             lines.append(" ".join(row_values))
 
         formatted_grid = "\n".join(lines)
-        return f"{formatted_grid}\n\n{puzzle_string}"
+        return f"\n\n{formatted_grid}\n\n{puzzle_string}"
 
     def _to_puzzle_string(self) -> str:
         chars = []
