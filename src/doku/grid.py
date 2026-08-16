@@ -20,10 +20,25 @@ class Grid:
             self.matrix.append(temp_row)
 
         # populate candidates
+        self._refresh_candidates()
+
+    def _refresh_candidates(self) -> None:
+        # populate candidates
         for row in range(self.h):
             for column in range(self.w):
-                candidates = self.get_candidates_for_cell(row, column)
-                self.set_candidates_for_cell(row, column, candidates)
+                if self.get_cell_value(row, column) == 0:
+                    candidates = self.get_candidates_for_cell(row, column)
+                    self.set_candidates_for_cell(row, column, candidates)
+                else:
+                    self.set_candidates_for_cell(row, column, set())
+
+    def _get_placed(self, cells: Iterable[tuple[int, int]]) -> set[int]:
+        placed = set()
+        for row, column in cells:
+            value = self.get_cell_value(row, column)
+            if value != 0:
+                placed.add(value)
+        return placed
 
     def get_value_from_puzzle_string(self, row: int, column: int) -> int:
         row_starts = [0, 9, 18, 27, 36, 45, 54, 63, 72]
@@ -36,6 +51,8 @@ class Grid:
 
     def set_cell_value(self, row: int, column: int, value: int) -> None:
         self.matrix[row][column].value = value
+        self.matrix[row][column].candidates = set()
+        self._refresh_candidates()
 
     def set_candidates_for_cell(self, row: int, column: int, candidates: set[int]) -> None:
         self.matrix[row][column].candidates = candidates
@@ -46,14 +63,6 @@ class Grid:
             for column in range(self.w):
                 puzzle_string += str(self.get_cell_value(row, column))
         return puzzle_string
-
-    def _get_placed(self, cells: Iterable[tuple[int, int]]) -> set[int]:
-        placed = set()
-        for row, column in cells:
-            value = self.get_cell_value(row, column)
-            if value != 0:
-                placed.add(value)
-        return placed
 
     def get_placed_for_row(self, row: int) -> set[int]:
         return self._get_placed((row, column) for column in range(self.w))
@@ -93,23 +102,31 @@ class Grid:
         return placed
 
     def get_candidates_for_cell(self, row: int, column: int) -> set[int]:
+        # Guard Clause
+        if self.get_cell_value(row, column) != 0:
+            return set()
+
         values = self.get_placed_for_row(row) | self.get_placed_for_column(column) | self.get_placed_for_box(row, column)
 
         return self.all_candidates - values
 
-    def get_cell_with_least_candidates(self) -> tuple[int, int]:
-        cell_row = 0
-        cell_column = 0
-        smallest_no_candidates = 10
-        for row in range(self.h):
-            for column in range(self.w):
-                cell_candidate_size = len(self.matrix[row][column].candidates)
-                if cell_candidate_size < smallest_no_candidates:
-                    smallest_no_candidates = cell_candidate_size
-                    cell_row = row
-                    cell_column = column
 
-        return (cell_row, cell_column)
+    def get_cell_with_least_candidates(self) -> Cell:
+        """Return the empty cell with the fewest candidate values.
+
+        Used for the backtracking heuristic (minimum remaining values):
+        guessing the most constrained cell first minimizes branching in the search tree.
+
+        Assumes candidates are up to date
+
+        Raises:
+            ValueError: if there are no empty cells (grid is fully solved).
+        """
+        return min(
+            (c for row in self.matrix for c in row if c.value == 0),
+            key=lambda c: len(c.candidates)
+        )
+
 
     def is_solved(self) -> bool:
         all_values = []

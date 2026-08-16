@@ -42,7 +42,7 @@ def test_get_cell_value_from_grid_matrix(standard_valid_incomplete: str, row: in
         (8, 8, 9),
     ],
 )
-def test_get_expected_from_complete_puzzle_string(standard_valid_complete: str, row: int, column: int, expected: int) -> None:
+def test_get_expected_value_from_complete(standard_valid_complete: str, row: int, column: int, expected: int) -> None:
     grid = Grid(standard_valid_complete)
     actual = grid.get_value_from_puzzle_string(row, column)
     assert actual == expected
@@ -99,7 +99,7 @@ def test_get_placed_for_given_box(standard_valid_incomplete: str, row: int, colu
     assert actual == expected
 
 
-def test_update_candidates_for_cell(standard_valid_incomplete) -> None:
+def test_candidates_set_on_grid_init(standard_valid_incomplete) -> None:
     given_row = 3
     given_column = 0
     expected_candidates = {1, 7}
@@ -110,13 +110,35 @@ def test_update_candidates_for_cell(standard_valid_incomplete) -> None:
     assert actural_candidates == expected_candidates
 
 
-def test_get_cell_with_least_candidates(standard_valid_incomplete) -> None:
-    expected_row_column = (4, 0)
+@pytest.mark.parametrize(
+    ("row", "column"),
+    [
+        (1, 0),
+        (1, 4),
+        (2, 6),
+        (4, 2),
+        (5, 4),
+        (5, 6),
+        (8, 1),
+        (6, 4),
+        (7, 8),
+    ],
+)
+def test_cell_with_value_has_no_candidates(standard_valid_incomplete, row: int, column: int) -> None:
+    expected_candidates = set()
 
     grid = Grid(standard_valid_incomplete)
-    actural_row_column = grid.get_cell_with_least_candidates()
+    actural_candidates = grid.get_candidates_for_cell(row, column)
 
-    assert actural_row_column == expected_row_column
+    assert actural_candidates == expected_candidates
+
+
+# FIX THIS TEST
+def test_get_cell_with_least_candidates(standard_valid_incomplete) -> None:
+    expected_row_column = (4, 0)
+    grid = Grid(standard_valid_incomplete)
+    actural_cell = grid.get_cell_with_least_candidates()
+    assert (actural_cell.row, actural_cell.column) == expected_row_column
 
 
 def test_puzzle_with_empty_cells_is_not_solved(standard_valid_incomplete) -> None:
@@ -126,7 +148,7 @@ def test_puzzle_with_empty_cells_is_not_solved(standard_valid_incomplete) -> Non
     assert actual == expected
 
 
-def test_puzzle_with_no_empty_cells_is_not_solved(standard_valid_complete) -> None:
+def test_puzzle_with_no_empty_cells_is_solved(standard_valid_complete) -> None:
     grid = Grid(standard_valid_complete)
     expected = True
     actual = grid.is_solved()

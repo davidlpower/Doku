@@ -24,11 +24,17 @@ def naked_single_puzzle_solution() -> str:
     return "534678912672195348198342567859761423426853791713924856961537284287419635345286179"
 
 
-def test_technique_apply_correctly_detects_change(easy_puzzle) -> None:
-    grid = Grid(easy_puzzle)
+@pytest.mark.parametrize(
+    ("puzzle", "expected"),
+    [
+        ("006078092529034760487629000263015987974003125851792643138900206692351874745006319", True),
+        ("316578492529134768487629531263415987974863125851792643138947256692351874745286319", False),
+    ],
+)
+def test_technique_apply_correctly_detects_change(puzzle, expected) -> None:
+    grid = Grid(puzzle)
     technique = NakedSingle()
     actual, _updated_grid = technique.apply(grid)
-    expected = True
     assert actual == expected
 
 

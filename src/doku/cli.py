@@ -63,14 +63,13 @@ def main(argv: list[str] | None = None) -> None:
             # puzzle. Stop entirely - no need to check remaining branches.
             solved_grid = grid
             break
+
         print("--Starting Backtrack--")
         # Logic stalled but the grid isn't solved or contradictory yet -
         # we have to guess. Pick the emptiest-looking cell (fewest
         # candidates) to minimise how many guesses we branch into.
-        cell = min(
-            (c for c in grid.cells if c.value == 0),
-            key=lambda c: len(c.candidates),
-        )
+        cell = grid.get_cell_with_least_candidates()
+
         # Push one new branch per possible value for that cell. These
         # get popped and processed (logic techniques + further guessing)
         # in later iterations of the outer while loop.
