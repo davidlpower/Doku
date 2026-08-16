@@ -84,6 +84,6 @@ def main(argv: list[str] | None = None) -> None:
 
     if solved_grid is not None:
         print(solved_grid)
-        print(f"Techniques: {technique_attempts} - Backtracks: {backtrack_attempts}")
+        print(f"\n Techniques: {technique_attempts} - Backtracks: {backtrack_attempts}")
     else:
         print("[No solution found]")
