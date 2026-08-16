@@ -25,6 +25,8 @@ def main(argv: list[str] | None = None) -> None:
     stack = [grid]
     solved_grid = None
 
+    backtrack_attempts = 0
+    technique_attempts = 0
     # Keep taking branches off the stack until one solves, or we run out.
     while stack:
         grid = stack.pop()
@@ -32,20 +34,21 @@ def main(argv: list[str] | None = None) -> None:
         # Apply logic techniques repeatedly until none of them can make
         # any further progress on this grid
         while True:
-            print("--Starting Main Loop--")
+            print("----Starting Main Loop----")
             progress = False
             for technique in techniques:
-                print(f"--Starting {technique.name}--")
+                print(f"-Starting {technique.name}-")
                 changed, grid = technique.apply(grid)
+                technique_attempts += 1
                 if changed:
-                    print("--Something changed--")
+                    print("-Something changed-")
                     # Something changed - restart from the first technique,
                     # since earlier techniques may now apply again.
                     progress = True
                     break
                 # This technique found nothing - try the next one.
-                print("--Nothing Changed--")
-                print(f"--Ending {technique.name}--")
+                print("-Nothing Changed-")
+                print(f"-Ending {technique.name}-")
             # A full pass over all techniques changed nothing: logic has
             # stalled (not necessarily solved, not necessarily wrong).
             if not progress:
@@ -77,8 +80,10 @@ def main(argv: list[str] | None = None) -> None:
             new_grid = copy.deepcopy(grid)
             new_grid.set_cell_value(cell.row, cell.column, guess)
             stack.append(new_grid)
+            backtrack_attempts += 1
 
     if solved_grid is not None:
         print(solved_grid)
+        print(f"Techniques: {technique_attempts} - Backtracks: {backtrack_attempts}")
     else:
-        print("No solution found.")
+        print("[No solution found]")

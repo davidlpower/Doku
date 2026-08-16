@@ -22,6 +22,35 @@ class Grid:
         # populate candidates
         self._refresh_candidates()
 
+    def __str__(self) -> str:
+        puzzle_string = self._to_puzzle_string()
+
+        lines = []
+        for row in range(self.h):
+            if row != 0 and row % 3 == 0:
+                lines.append("------+-------+------")
+
+            row_values = []
+            for column in range(self.w):
+                if column != 0 and column % 3 == 0:
+                    row_values.append("|")
+
+                char = puzzle_string[row * self.w + column]
+                row_values.append(char if char != "0" else ".")
+
+            lines.append(" ".join(row_values))
+
+        formatted_grid = "\n".join(lines)
+        return f"{formatted_grid}\n\n{puzzle_string}"
+
+    def _to_puzzle_string(self) -> str:
+        chars = []
+        for row in range(self.h):
+            for column in range(self.w):
+                value = self.matrix[row][column].value
+                chars.append(str(value))
+        return "".join(chars)
+
     def _refresh_candidates(self) -> None:
         # populate candidates
         for row in range(self.h):
@@ -114,13 +143,8 @@ class Grid:
     def get_cell_with_least_candidates(self) -> Cell:
         """Return the empty cell with the fewest candidate values.
 
-        Used for the backtracking heuristic (minimum remaining values):
+        Used for the backtracking heuristic:
         guessing the most constrained cell first minimizes branching in the search tree.
-
-        Assumes candidates are up to date
-
-        Raises:
-            ValueError: if there are no empty cells (grid is fully solved).
         """
         return min(
             (c for row in self.matrix for c in row if c.value == 0),
@@ -135,6 +159,7 @@ class Grid:
                 if self.get_cell_value(row, column) != 0:
                     all_values.append(self.get_cell_value(row, column))
         return len(all_values) == 81
+
 
     def is_invalid(self) -> bool:
         """ToDo"""
