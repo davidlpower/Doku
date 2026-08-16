@@ -34,40 +34,34 @@ def main(argv: list[str] | None = None) -> None:
         # Apply logic techniques repeatedly until none of them can make
         # any further progress on this grid
         while True:
-            print("----Starting Main Loop----")
             progress = False
             for technique in techniques:
-                print(f"-Starting {technique.name}-")
                 changed, grid = technique.apply(grid)
                 technique_attempts += 1
                 if changed:
-                    print("-Something changed-")
                     # Something changed - restart from the first technique,
                     # since earlier techniques may now apply again.
                     progress = True
                     break
                 # This technique found nothing - try the next one.
-                print("-Nothing Changed-")
-                print(f"-Ending {technique.name}-")
+
             # A full pass over all techniques changed nothing: logic has
             # stalled (not necessarily solved, not necessarily wrong).
             if not progress:
-                print("--No Progress Check--")
                 break
-        print("--[is_invalid Check]--")
+
         if grid.is_invalid():
             # This branch's guesses led somewhere impossible (e.g. a cell
             # with zero candidates left). Abandon it and try the next
             # branch on the stack.
             continue
-        print("--[is_solved Check]--")
+
         if grid.is_solved():
             # Logic alone (possibly plus earlier guesses) finished the
             # puzzle. Stop entirely - no need to check remaining branches.
             solved_grid = grid
             break
 
-        print("--Starting Backtrack--")
         # Logic stalled but the grid isn't solved or contradictory yet -
         # we have to guess. Pick the emptiest-looking cell (fewest
         # candidates) to minimise how many guesses we branch into.

@@ -133,7 +133,6 @@ def test_cell_with_value_has_no_candidates(standard_valid_incomplete, row: int, 
     assert actural_candidates == expected_candidates
 
 
-# FIX THIS TEST
 def test_get_cell_with_least_candidates(standard_valid_incomplete) -> None:
     expected_row_column = (4, 0)
     grid = Grid(standard_valid_incomplete)
