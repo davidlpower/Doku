@@ -139,18 +139,13 @@ class Grid:
 
         return self.all_candidates - values
 
-
     def get_cell_with_least_candidates(self) -> Cell:
         """Return the empty cell with the fewest candidate values.
 
         Used for the backtracking heuristic:
         guessing the most constrained cell first minimizes branching in the search tree.
         """
-        return min(
-            (c for row in self.matrix for c in row if c.value == 0),
-            key=lambda c: len(c.candidates)
-        )
-
+        return min((c for row in self.matrix for c in row if c.value == 0), key=lambda c: len(c.candidates))
 
     def is_solved(self) -> bool:
         all_values = []
@@ -159,7 +154,6 @@ class Grid:
                 if self.get_cell_value(row, column) != 0:
                     all_values.append(self.get_cell_value(row, column))
         return len(all_values) == 81
-
 
     def is_invalid(self) -> bool:
         """ToDo"""

@@ -31,7 +31,7 @@ def naked_single_puzzle_solution() -> str:
         ("316578492529134768487629531263415987974863125851792643138947256692351874745286319", False),
     ],
 )
-def test_technique_apply_correctly_detects_change(puzzle, expected) -> None:
+def test_technique_apply_correctly_reports_change(puzzle, expected) -> None:
     grid = Grid(puzzle)
     technique = NakedSingle()
     actual, _updated_grid = technique.apply(grid)
