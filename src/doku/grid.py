@@ -83,6 +83,14 @@ class Grid:
         self.matrix[row][column].candidates = set()
         self._refresh_candidates()
 
+    # WRITE TEST FOR THIS
+    def get_empty_cells_for_row(self, row: int) -> set[int]:
+        return (c for row in self.matrix for c in row if c.value == 0)
+
+    # WRITE TEST FOR THIS
+    def get_remaining_values_for_row(self, row: int) -> set[int]:
+        return (c.value for row in self.matrix for c in row if c.value != 0) - self.all_candidates
+
     def set_candidates_for_cell(self, row: int, column: int, candidates: set[int]) -> None:
         self.matrix[row][column].candidates = candidates
 
