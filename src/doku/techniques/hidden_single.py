@@ -14,18 +14,17 @@ class HiddenSingle(Technique):
 
             # Skip if full row
             if len(empty_cells) > 0:
-
                 for pv in possible_values:
-                    for ec in empty_cells:
+                    for ec in list(empty_cells):
                         if len(empty_cells) == 1:
-                            grid.set_cell_value(ec.row, ec.column, pv.value)
+                            grid.set_cell_value(ec.row, ec.column, pv)
                             changed = True
                             break
 
-                        values = grid.get_placed_for_column(ec.column) + grid.get_placed_for_column(ec.row, ec.column)
+                        values = grid.get_placed_for_column(ec.column) | grid.get_placed_for_column(ec.column)
 
-                        if pv.value in values:
-                            empty_cells.pop()
+                        if pv in values:
+                            empty_cells.remove(ec)
 
         # Evaluate Columns
         # Evaluate Boxes

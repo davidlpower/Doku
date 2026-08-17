@@ -140,6 +140,23 @@ def test_get_cell_with_least_candidates(standard_valid_incomplete) -> None:
     assert (actural_cell.row, actural_cell.column) == expected_row_column
 
 
+def test_get_empty_cells_for_row(standard_valid_incomplete) -> None:
+    row = 4
+    expected_cells = {(4, 0), (4, 4), (4, 5), (4, 7)}
+    grid = Grid(standard_valid_incomplete)
+    actual_cells = grid.get_empty_cells_for_row(row)
+    actual = {(cell.row, cell.column) for cell in actual_cells}
+    assert actual == expected_cells
+
+
+def test_get_remaining_values_for_row(standard_valid_incomplete) -> None:
+    row = 4
+    expected_values = {3, 6, 7, 4}
+    grid = Grid(standard_valid_incomplete)
+    actural_values = grid.get_remaining_values_for_row(row)
+    assert actural_values == expected_values
+
+
 def test_puzzle_with_empty_cells_is_not_solved(standard_valid_incomplete) -> None:
     grid = Grid(standard_valid_incomplete)
     expected = False

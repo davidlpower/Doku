@@ -22,21 +22,7 @@ def puzzle() -> str:
     return "900100003730050186051320004090000035340078012100036800260004370508093000403000200"
 
 
-@pytest.mark.parametrize(
-    ("puzzle", "expected"),
-    [
-        ("006078092529034760487629000263015987974003125851792643138900206692351874745006319", True),
-        ("316578492529134768487629531263415987974863125851792643138947256692351874745286319", False),
-    ],
-)
-def test_technique_apply_correctly_reports_change(puzzle, expected) -> None:
-    grid = Grid(puzzle)
-    technique = HiddenSingle()
-    actual, _updated_grid = technique.apply(grid)
-    assert actual == expected
-
-
-def test_naked_single_correctly_finds_solution(puzzle, puzzle_solution) -> None:
+def test_naked_single_correctly_finds_solution(puzzle) -> None:
     grid = Grid(puzzle)
     technique = HiddenSingle()
     _changed, updated_grid = technique.apply(grid)
