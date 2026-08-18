@@ -6,8 +6,18 @@ class HiddenSingle(Technique):
     name = "Naked Single"
 
     def apply(self, grid: Grid) -> tuple[bool, Grid]:
-        changed = False
         # Evaluate Rows
+        row_changed, grid = self._apply_for_row(grid)
+        # Evaluate Columns
+        column_changed, grid = self._apply_for_column(grid)
+        # Evaluate Boxes
+        box_changed, grid = self._apply_for_box(grid)
+
+        changed = row_changed | column_changed | box_changed
+        return (changed, grid)
+
+    def _apply_for_row(self, grid: Grid) -> tuple[bool, Grid]:
+        changed = False
         for row in range(grid.h):
             empty_cells = grid.get_empty_cells_for_row(row)
             possible_values = grid.get_remaining_values_for_row(row)
@@ -28,6 +38,12 @@ class HiddenSingle(Technique):
                             changed = True
                             break
 
-        # Evaluate Columns
-        # Evaluate Boxes
+        return (changed, grid)
+
+    def _apply_for_column(self, grid: Grid) -> tuple[bool, Grid]:
+        changed = False
+        return (changed, grid)
+
+    def _apply_for_box(self, grid: Grid) -> tuple[bool, Grid]:
+        changed = False
         return (changed, grid)
