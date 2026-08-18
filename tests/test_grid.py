@@ -30,8 +30,8 @@ def test_get_cell_value_from_grid_matrix(easy_puzzle: str, row: int, column: int
         (8, 8, 9),
     ],
 )
-def test_get_expected_value_from_complete(standard_valid_complete: str, row: int, column: int, expected: int) -> None:
-    grid = Grid(standard_valid_complete)
+def test_get_expected_value_from_complete(simple_puzzle_solution: str, row: int, column: int, expected: int) -> None:
+    grid = Grid(simple_puzzle_solution)
     actual = grid.get_value_from_puzzle_string(row, column)
     assert actual == expected
 
@@ -152,8 +152,8 @@ def test_puzzle_with_empty_cells_is_not_solved(easy_puzzle) -> None:
     assert actual == expected
 
 
-def test_puzzle_with_no_empty_cells_is_solved(standard_valid_complete) -> None:
-    grid = Grid(standard_valid_complete)
+def test_puzzle_with_no_empty_cells_is_solved(easy_puzzle_solution) -> None:
+    grid = Grid(easy_puzzle_solution)
     expected = True
     actual = grid.is_solved()
     assert actual == expected

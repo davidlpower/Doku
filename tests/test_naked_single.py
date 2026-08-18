@@ -1,8 +1,8 @@
 import pytest
 
-from conftest import EASY_PUZZLE, EASY_PUZZLE_SOLUTION
 from doku.grid import Grid
 from doku.techniques.naked_single import NakedSingle
+from tests.conftest import EASY_PUZZLE, EASY_PUZZLE_SOLUTION
 
 
 @pytest.mark.parametrize(
