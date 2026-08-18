@@ -13,7 +13,6 @@ class HiddenSingle(Technique):
             possible_values = grid.get_remaining_values_for_row(row)
             # Skip complete row
             if len(empty_cells) > 0:
-
                 for pv in possible_values:
                     for ec in list(empty_cells):
                         placed_values_row = grid.get_placed_for_column(ec.column)
