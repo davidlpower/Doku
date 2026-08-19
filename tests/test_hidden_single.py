@@ -18,6 +18,7 @@ def test_technique_apply_correctly_reports_change(puzzle, expected) -> None:
     actual, _updated_grid = technique.apply(grid)
     assert actual == expected
 
+
 def test_hidden_single_correctly_finds_solution(hidden_single_puzzle) -> None:
     apply_result = "601879043900506180000431069006390001009050600500007900160785390098003005375942816"
     grid = Grid(hidden_single_puzzle)

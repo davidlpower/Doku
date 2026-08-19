@@ -19,10 +19,7 @@ class HiddenSingle(Technique):
     def _apply_hidden_single(self, grid: Grid, empty_cells: set[Cell], possible_values: set[int]) -> tuple[bool, Grid]:
         changed = False
         for pv in possible_values:
-            matches = [
-                ec for ec in empty_cells if
-                pv in grid.get_candidates_for_cell(ec.row, ec.column)
-            ]
+            matches = [ec for ec in empty_cells if pv in grid.get_candidates_for_cell(ec.row, ec.column)]
             if len(matches) == 1:
                 ec = matches[0]
                 grid.set_cell_value(ec.row, ec.column, pv)
