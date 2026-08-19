@@ -24,8 +24,7 @@ def main(argv: list[str] | None = None) -> None:
 
     telemetry = new_telemetry(args.path)
 
-    techniques = [NakedSingle()]
-    # techniques = [NakedSingle(), HiddenSingle()]
+    techniques = [NakedSingle(), HiddenSingle()]
 
     # stack holds grid "branches" to try. Starts with just the original grid.
     # Backtracking guesses get pushed here as new branches to explore later.
