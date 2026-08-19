@@ -127,8 +127,8 @@ class Grid:
     def get_placed_for_column(self, column: int) -> set[int]:
         return self._get_placed((row, column) for row in range(self.h))
 
-    def _get_box_for_row_column(self, row: int, column: int) -> set[int]:
-        identified_box = None
+    def _get_box_for_row_column(self, row: int, column: int) -> int:
+        identified_box = 0
         for index, box in enumerate(self.boxes):
             if row in box["rows"] and column in box["columns"]:
                 identified_box = index
@@ -145,7 +145,7 @@ class Grid:
                     placed.add(value)
         return placed
 
-    def get_empty_cells_for_box(self, row: int, column: int) -> set[int]:
+    def get_empty_cells_for_box(self, row: int, column: int) -> set[Cell]:
         identified_box = self._get_box_for_row_column(row, column)
         empty_cells = set()
         for row in self.boxes[identified_box]["rows"]:
