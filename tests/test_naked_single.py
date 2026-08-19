@@ -2,14 +2,14 @@ import pytest
 
 from doku.grid import Grid
 from doku.techniques.naked_single import NakedSingle
-from tests.conftest import EASY_PUZZLE, EASY_PUZZLE_SOLUTION
+from tests.conftest import EASY_PUZZLE, EASY_SOLUTION
 
 
 @pytest.mark.parametrize(
     ("puzzle", "expected"),
     [
         (EASY_PUZZLE, True),
-        (EASY_PUZZLE_SOLUTION, False),
+        (EASY_SOLUTION, False),
     ],
 )
 def test_technique_apply_correctly_reports_change(puzzle, expected) -> None:

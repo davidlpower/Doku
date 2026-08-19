@@ -155,7 +155,7 @@ class Grid:
                     empty_cells.add(cell)
         return empty_cells
 
-    def get_box_center_cell(self) -> set[tuple[int, int]]:
+    def get_box_center_cells(self) -> set[tuple[int, int]]:
         return {(box["rows"][1], box["columns"][1]) for box in self.boxes}
 
     def get_candidates_for_cell(self, row: int, column: int) -> set[int]:
