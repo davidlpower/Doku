@@ -1,3 +1,4 @@
+from doku.cell import Cell
 from doku.grid import Grid
 from doku.techniques.technique import Technique
 
@@ -13,35 +14,41 @@ class HiddenSingle(Technique):
         # Evaluate Boxes
         box_changed, grid = self._apply_for_box(grid)
 
-        changed = row_changed | column_changed | box_changed
+        return (row_changed | column_changed | box_changed, grid)
+
+    def _apply_hidden_single(self, grid: Grid, empty_cells: set[Cell], possible_values: set[int]) -> tuple[bool, Grid]:
+        changed = False
+        for pv in possible_values:
+            matches = [
+                ec for ec in empty_cells if
+                pv in grid.get_candidates_for_cell(ec.row, ec.column)
+            ]
+            if len(matches) == 1:
+                ec = matches[0]
+                grid.set_cell_value(ec.row, ec.column, pv)
+                changed = True
         return (changed, grid)
 
     def _apply_for_row(self, grid: Grid) -> tuple[bool, Grid]:
         changed = False
         for row in range(grid.h):
             empty_cells = grid.get_empty_cells_for_row(row)
+            if not empty_cells:
+                continue
             possible_values = grid.get_remaining_values_for_row(row)
-            # Skip complete row
-            if len(empty_cells) > 0:
-                for pv in possible_values:
-                    for ec in list(empty_cells):
-                        placed_values_row = grid.get_placed_for_column(ec.column)
-                        placed_values_box = grid.get_placed_for_box(ec.row, ec.column)
-
-                        # skip this itteration if value used already
-                        if pv in placed_values_row or pv in placed_values_box:
-                            continue
-
-                        if len(empty_cells) == 1:
-                            grid.set_cell_value(ec.row, ec.column, pv)
-                            empty_cells.remove(ec)
-                            changed = True
-                            break
-
+            row_changed, grid = self._apply_hidden_single(grid, empty_cells, possible_values)
+            changed |= row_changed
         return (changed, grid)
 
     def _apply_for_column(self, grid: Grid) -> tuple[bool, Grid]:
         changed = False
+        for column in range(grid.w):
+            empty_cells = grid.get_empty_cells_for_column(column)
+            if not empty_cells:
+                continue
+            possible_values = grid.get_remaining_values_for_column(column)
+            column_changed, grid = self._apply_hidden_single(grid, empty_cells, possible_values)
+            changed |= column_changed
         return (changed, grid)
 
     def _apply_for_box(self, grid: Grid) -> tuple[bool, Grid]:

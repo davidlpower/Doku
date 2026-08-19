@@ -90,6 +90,13 @@ class Grid:
         placed_values = self.get_placed_for_row(row)
         return self.all_candidates - placed_values
 
+    def get_empty_cells_for_column(self, column: int) -> set[Cell]:
+        return {row[column] for row in self.matrix if row[column].value == 0}
+
+    def get_remaining_values_for_column(self, column: int) -> set[int]:
+        placed_values = self.get_placed_for_column(column)
+        return self.all_candidates - placed_values
+
     def set_candidates_for_cell(self, row: int, column: int, candidates: set[int]) -> None:
         self.matrix[row][column].candidates = candidates
 
