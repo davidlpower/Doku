@@ -1,63 +1,14 @@
 # Sudoku Solver
 
-A Python library and CLI tool for solving classic 9×9 Sudoku puzzles using a **hybrid strategy**: logical constraint-propagation techniques first, falling back to backtracking search only when logic alone stalls. Difficulty rating falls out naturally, as a byproduct of tracking which techniques were needed to reach a solution.
+A Python CLI tool for solving classic 9×9 Sudoku puzzles using a **hybrid strategy**: logical constraint-propagation techniques first, falling back to backtracking search only when logic alone stalls. Difficulty rating falls out naturally, as a byproduct of tracking which techniques were needed to reach a solution.
 
 ## Goals
 
 - Solve any valid 9×9 Sudoku puzzle correctly.
 - Solve easy/medium puzzles using pure logic, no guessing.
 - Fall back to backtracking + propagation for harder puzzles, without exploding in runtime.
-- Report which technique(s) were used, enabling a difficulty rating.
-- Clean, typed, testable Python — reusable as a library, not just a script.
-
-### Non-Goals (v1)
-
-- Puzzle *generation* (planned as a follow-on project, reusing this solver).
-- Variant Sudoku (Killer, Diagonal, irregular boxes, etc.) — architecture shouldn't preclude this later, but v1 targets classic 9×9.
-- GUI — CLI and library API only.
-
-## How Solving Works
-
-```
-def solve(grid: Grid) -> Grid | None:
-    stack = [grid]
-
-    while stack:
-        grid = stack.pop()
-
-        while True:
-            progress = False
-            for technique in TECHNIQUES:
-                changed, grid = technique.apply(grid)
-                if changed:
-                    progress = True
-                    break
-            if not progress:
-                break
-
-        if grid.has_contradiction():
-            continue  # dead end, try next item on stack
-
-        if grid.is_solved():
-            return grid
-
-        cell = pick_cell_to_guess(grid)
-        for guess in cell.candidates:
-            new_grid = grid.copy()
-            new_grid.place(cell, guess)
-            stack.append(new_grid)
-
-    return None  # stack exhausted, no solution
-```
-
-Key points:
-
-- **No cell is chosen up front.** Each technique asks "can I make progress *anywhere* on the grid?"
-- **Progress includes candidate elimination, not just filling in digits.** A technique like pointing pairs or X-Wing may remove a digit from several cells' candidate sets without placing any value — but that narrowing is still useful, since it can trigger a naked/hidden single elsewhere, cascading toward a solution without ever guessing.
-- **After any progress, we restart from the cheapest techniques.** A single elimination can create a new naked single, so it's standard to retry cheap techniques before reaching for expensive ones again.
-- **"All techniques failed" means a full pass made zero progress anywhere** — only then does backtracking kick in.
-- **Backtracking is the one place a cell actually gets chosen** — typically the emptiest/most-constrained cell (fewest candidates, the MRV heuristic). After each guess, the full logic loop above re-runs on the resulting grid before deciding whether to guess again or backtrack.
-- **Contradictions are caught immediately**, not just at the end — if a cell's candidate set ever drops to zero, or a unit can't fit a required digit, that's detected as soon as it happens.
+- Report which technique(s) were used
+- Clean, typed, testable Python
 
 ## Data Model
 
@@ -86,7 +37,7 @@ Triggered only if Stage 1 stalls with the puzzle unsolved:
 - Try each candidate; after placing it, re-run Stage 1's propagation on the resulting grid before recursing (pruning the search space rather than doing naive brute force).
 - On contradiction, backtrack.
 
-### Stage 3 — Difficulty Rating (derived, not a separate solve)
+### Bonus — Difficulty Rating (derived, not a separate solve)
 
 Based on the techniques actually needed to reach a solution:
 
@@ -94,38 +45,6 @@ Based on the techniques actually needed to reach a solution:
 - **Medium** — + pairs/triples, pointing pairs.
 - **Hard** — + X-Wing or similar.
 - **Expert/Extreme** — backtracking required at all.
-
-## Example Architecture / Module Layout
-
-```
-sudoku/
-  grid.py            # Grid, Cell, Unit data structures
-  io.py              # parse/serialize (string, file, common formats)
-  techniques/
-    singles.py
-    pairs_triples.py
-    pointing.py
-    fish.py           # X-Wing, Swordfish
-  cli.py                 # command-line entry point
-tests/
-  fixtures/               # puzzles by known difficulty, for regression
-  test_techniques/
-  test_backtrack.py
-  test_solver_integration.py
-```
-
-## Public API (sketch)
-
-```python
-from sudoku import solve
-
-result = solve(puzzle_string)
-result.solved: bool
-result.grid: Grid
-result.techniques_used: list[TechniqueName]
-result.difficulty: Difficulty
-result.backtrack_steps: int  # 0 if pure logic
-```
 
 ## Tech Stack
 
