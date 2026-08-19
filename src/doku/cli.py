@@ -3,6 +3,7 @@ import copy
 
 from doku.game_io import GameIO
 from doku.grid import Grid
+from doku.techniques.hidden_single import HiddenSingle
 from doku.techniques.naked_single import NakedSingle
 
 
@@ -18,7 +19,7 @@ def main(argv: list[str] | None = None) -> None:
     puzzle_string = game.load_puzzle_from_file(args.path)
     grid = Grid(puzzle_string)
 
-    techniques = [NakedSingle()]
+    techniques = [NakedSingle(), HiddenSingle()]
 
     # stack holds grid "branches" to try. Starts with just the original grid.
     # Backtracking guesses get pushed here as new branches to explore later.
