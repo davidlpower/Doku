@@ -9,12 +9,22 @@ class Grid:
         self.puzzle_string = puzzle_string
         self.matrix = []
         self.all_candidates = {1, 2, 3, 4, 5, 6, 7, 8, 9}
-
+        self.boxes = [
+            {"rows": [0, 1, 2], "columns": [0, 1, 2]},
+            {"rows": [0, 1, 2], "columns": [3, 4, 5]},
+            {"rows": [0, 1, 2], "columns": [6, 7, 8]},
+            {"rows": [3, 4, 5], "columns": [0, 1, 2]},
+            {"rows": [3, 4, 5], "columns": [3, 4, 5]},
+            {"rows": [3, 4, 5], "columns": [6, 7, 8]},
+            {"rows": [6, 7, 8], "columns": [0, 1, 2]},
+            {"rows": [6, 7, 8], "columns": [3, 4, 5]},
+            {"rows": [6, 7, 8], "columns": [6, 7, 8]},
+        ]
         # populate matrix
         for row in range(self.h):
             temp_row = []
             for column in range(self.w):
-                value = self.get_value_from_puzzle_string(row, column)
+                value = self._get_value_from_puzzle_string(row, column)
                 cell = Cell(value, set(), row, column)
                 temp_row.append(cell)
             self.matrix.append(temp_row)
@@ -69,7 +79,7 @@ class Grid:
                 placed.add(value)
         return placed
 
-    def get_value_from_puzzle_string(self, row: int, column: int) -> int:
+    def _get_value_from_puzzle_string(self, row: int, column: int) -> int:
         row_starts = [0, 9, 18, 27, 36, 45, 54, 63, 72]
         index = row_starts[row] + column
         return int(self.puzzle_string[index])
@@ -97,6 +107,10 @@ class Grid:
         placed_values = self.get_placed_for_column(column)
         return self.all_candidates - placed_values
 
+    def get_remaining_values_for_box(self, row: int, column: int) -> set[int]:
+        placed_values = self.get_placed_for_box(row, column)
+        return self.all_candidates - placed_values
+
     def set_candidates_for_cell(self, row: int, column: int, candidates: set[int]) -> None:
         self.matrix[row][column].candidates = candidates
 
@@ -113,36 +127,36 @@ class Grid:
     def get_placed_for_column(self, column: int) -> set[int]:
         return self._get_placed((row, column) for row in range(self.h))
 
-    def get_placed_for_box(self, row: int, column: int) -> set[int]:
-        boxes = [
-            {"rows": [0, 1, 2], "columns": [0, 1, 2]},
-            {"rows": [0, 1, 2], "columns": [3, 4, 5]},
-            {"rows": [0, 1, 2], "columns": [6, 7, 8]},
-            {"rows": [3, 4, 5], "columns": [0, 1, 2]},
-            {"rows": [3, 4, 5], "columns": [3, 4, 5]},
-            {"rows": [3, 4, 5], "columns": [6, 7, 8]},
-            {"rows": [6, 7, 8], "columns": [0, 1, 2]},
-            {"rows": [6, 7, 8], "columns": [3, 4, 5]},
-            {"rows": [6, 7, 8], "columns": [6, 7, 8]},
-        ]
-
+    def _get_box_for_row_column(self, row: int, column: int) -> set[int]:
         identified_box = None
-        for index, box in enumerate(boxes):
+        for index, box in enumerate(self.boxes):
             if row in box["rows"] and column in box["columns"]:
                 identified_box = index
                 break
+        return identified_box
 
-        if identified_box is None:
-            raise ValueError(f"No box found for row={row}, column={column}")
-
+    def get_placed_for_box(self, row: int, column: int) -> set[int]:
+        identified_box = self._get_box_for_row_column(row, column)
         placed = set()
-        for row in boxes[identified_box]["rows"]:
-            for column in boxes[identified_box]["columns"]:
-                value = self.get_value_from_puzzle_string(row, column)
+        for row in self.boxes[identified_box]["rows"]:
+            for column in self.boxes[identified_box]["columns"]:
+                value = self.get_cell_value(row, column)
                 if value != 0:
                     placed.add(value)
-
         return placed
+
+    def get_empty_cells_for_box(self, row: int, column: int) -> set[int]:
+        identified_box = self._get_box_for_row_column(row, column)
+        empty_cells = set()
+        for row in self.boxes[identified_box]["rows"]:
+            for column in self.boxes[identified_box]["columns"]:
+                cell = self.matrix[row][column]
+                if cell.value == 0:
+                    empty_cells.add(cell)
+        return empty_cells
+
+    def get_box_center_cell(self) -> set[tuple[int, int]]:
+        return {(box["rows"][1], box["columns"][1]) for box in self.boxes}
 
     def get_candidates_for_cell(self, row: int, column: int) -> set[int]:
         # Guard Clause

@@ -53,4 +53,11 @@ class HiddenSingle(Technique):
 
     def _apply_for_box(self, grid: Grid) -> tuple[bool, Grid]:
         changed = False
+        for box in grid.get_box_center_cell():
+            empty_cells = grid.get_empty_cells_for_box(box[0], box[1])
+            if not empty_cells:
+                continue
+            possible_values = grid.get_remaining_values_for_box(box[0], box[1])
+            column_changed, grid = self._apply_hidden_single(grid, empty_cells, possible_values)
+            changed |= column_changed
         return (changed, grid)
