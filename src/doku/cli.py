@@ -2,7 +2,6 @@ import argparse
 import copy
 import time
 from pathlib import Path
-from time import sleep
 
 from doku.game_io import GameIO
 from doku.grid import Grid
