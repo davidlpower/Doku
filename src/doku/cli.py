@@ -2,6 +2,7 @@ import argparse
 import copy
 import time
 from pathlib import Path
+from time import sleep
 
 from doku.game_io import GameIO
 from doku.grid import Grid
@@ -49,7 +50,7 @@ def main(argv: list[str] | None = None) -> None:
             for technique in techniques:
                 changed, grid = technique.apply(grid)
                 technique_attempts += 1
-                telemetry.record_technique(type(technique).__name__, changed)
+                telemetry.record_technique(technique.name, changed)
                 if changed:
                     # Something changed - restart from the first technique,
                     # since earlier techniques may now apply again.
@@ -62,7 +63,7 @@ def main(argv: list[str] | None = None) -> None:
             if not progress:
                 break
 
-        if grid.is_invalid():
+        if not grid.is_valid():
             # This branch's guesses led somewhere impossible (e.g. a cell
             # with zero candidates left). Abandon it and try the next
             # branch on the stack.

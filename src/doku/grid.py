@@ -32,6 +32,8 @@ class Grid:
         # populate candidates
         self._refresh_candidates()
 
+# AI - PRINT CODE BY AI
+
     def __str__(self) -> str:
         puzzle_string = self._to_puzzle_string()
 
@@ -51,7 +53,30 @@ class Grid:
             lines.append(" ".join(row_values))
 
         formatted_grid = "\n".join(lines)
-        return f"\n\n{formatted_grid}\n\n{puzzle_string}"
+        formatted_candidates = self._format_candidates()
+        return f"\n\n{formatted_grid}\n\n{puzzle_string}\n\n{formatted_candidates}"
+
+    def _format_candidates(self) -> str:
+        cell_width = 3
+        lines = []
+        for row in range(self.h):
+            if row != 0 and row % 3 == 0:
+                segment = "-" * (cell_width * 3 + 2)
+                lines.append(f"{segment}+{segment}+{segment}")
+
+            row_values = []
+            for column in range(self.w):
+                if column != 0 and column % 3 == 0:
+                    row_values.append("|")
+
+                cell = self.matrix[row][column]
+                text = "".join(str(c) for c in sorted(cell.candidates))
+                row_values.append(text.ljust(cell_width))
+
+            lines.append(" ".join(row_values))
+
+        return "\n".join(lines)
+# AI - PRINT CODE BY AI
 
     def _to_puzzle_string(self) -> str:
         chars = []
@@ -62,12 +87,13 @@ class Grid:
         return "".join(chars)
 
     def _refresh_candidates(self) -> None:
-        # populate candidates
         for row in range(self.h):
             for column in range(self.w):
                 if self.get_cell_value(row, column) == 0:
-                    candidates = self.get_candidates_for_cell(row, column)
-                    self.set_candidates_for_cell(row, column, candidates)
+                    cell = self.matrix[row][column]
+                    fresh = self.get_candidates_for_cell(row, column)
+                    # only ever narrow candidates, never widen candidates back up
+                    self.set_candidates_for_cell(row, column, cell.candidates & fresh if cell.candidates else fresh)
                 else:
                     self.set_candidates_for_cell(row, column, set())
 
@@ -183,6 +209,11 @@ class Grid:
                     all_values.append(self.get_cell_value(row, column))
         return len(all_values) == 81
 
-    def is_invalid(self) -> bool:
-        """ToDo"""
-        return False
+    def is_valid(self) -> bool:
+        valid = True
+        for row in range(self.h):
+            for column in range(self.w):
+                if self.get_cell_value(row, column) == 0 and self.get_candidates_for_cell(row, column) == 0:
+                    valid = False
+                    break
+        return valid
