@@ -32,7 +32,7 @@ class Grid:
         # populate candidates
         self._refresh_candidates()
 
-# AI - PRINT CODE BY AI
+    # AI - PRINT CODE BY AI
 
     def __str__(self) -> str:
         puzzle_string = self._to_puzzle_string()
@@ -54,7 +54,8 @@ class Grid:
 
         formatted_grid = "\n".join(lines)
         return f"\n\n{formatted_grid}\n\n{puzzle_string}"
-# AI - PRINT CODE BY AI
+
+    # AI - PRINT CODE BY AI
 
     def _to_puzzle_string(self) -> str:
         chars = []

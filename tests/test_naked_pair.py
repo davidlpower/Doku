@@ -17,4 +17,3 @@ def test_technique_apply_correctly_reports_change(puzzle, expected) -> None:
     technique = NakedPair()
     actual, _updated_grid = technique.apply(grid)
     assert actual == expected
-
