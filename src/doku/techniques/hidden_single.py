@@ -4,7 +4,7 @@ from doku.techniques.technique import Technique
 
 
 class HiddenSingle(Technique):
-    name = "Naked Single"
+    name = "Hidden Single"
 
     def apply(self, grid: Grid) -> tuple[bool, Grid]:
         # Evaluate Rows
