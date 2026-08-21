@@ -87,7 +87,7 @@ def main(argv: list[str] | None = None) -> None:
             stack.append(new_grid)
             backtrack_attempts += 1
 
-# AI - TELEMETRY CODE BY AI
+    # AI - TELEMETRY CODE BY AI
     telemetry.elapsed_seconds = time.perf_counter() - start
     telemetry.backtrack_attempts = backtrack_attempts
     telemetry.solved = solved_grid is not None
@@ -106,4 +106,6 @@ def main(argv: list[str] | None = None) -> None:
         print(f"  {r.started_at}  {status:6}  {r.elapsed_seconds:.4f}s  backtracks={r.backtrack_attempts}")
         for name, stats in r.technique_stats.items():
             print(f"      {name}: {stats.successes}/{stats.attempts}")
+
+
 # AI - TELEMETRY CODE BY AI
