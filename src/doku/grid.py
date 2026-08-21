@@ -53,29 +53,7 @@ class Grid:
             lines.append(" ".join(row_values))
 
         formatted_grid = "\n".join(lines)
-        formatted_candidates = self._format_candidates()
-        return f"\n\n{formatted_grid}\n\n{puzzle_string}\n\n{formatted_candidates}"
-
-    def _format_candidates(self) -> str:
-        cell_width = 3
-        lines = []
-        for row in range(self.h):
-            if row != 0 and row % 3 == 0:
-                segment = "-" * (cell_width * 3 + 2)
-                lines.append(f"{segment}+{segment}+{segment}")
-
-            row_values = []
-            for column in range(self.w):
-                if column != 0 and column % 3 == 0:
-                    row_values.append("|")
-
-                cell = self.matrix[row][column]
-                text = "".join(str(c) for c in sorted(cell.candidates))
-                row_values.append(text.ljust(cell_width))
-
-            lines.append(" ".join(row_values))
-
-        return "\n".join(lines)
+        return f"\n\n{formatted_grid}\n\n{puzzle_string}"
 # AI - PRINT CODE BY AI
 
     def _to_puzzle_string(self) -> str:
