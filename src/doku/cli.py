@@ -20,7 +20,7 @@ def main(argv: list[str] | None = None) -> None:
     args = parser.parse_args(argv)
 
     game = GameIO()
-    puzzle_string = game.load_puzzle_from_file(args.path)
+    puzzle_string = game.load_puzzle(args.path)
     grid = Grid(puzzle_string)
 
     telemetry = new_telemetry(args.path)
