@@ -59,4 +59,10 @@ class NakedPair(Technique):
 
     def _apply_for_box(self, grid: Grid) -> tuple[bool, Grid]:
         changed = False
+        for box in grid.get_box_center_cells():
+            empty_cells = grid.get_empty_cells_for_box(box[0], box[1])
+            if len(empty_cells) < 2:
+                continue
+            box_changed, grid = self._apply_naked_pair(grid, empty_cells)
+            changed |= box_changed
         return (changed, grid)
