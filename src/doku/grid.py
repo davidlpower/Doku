@@ -192,7 +192,7 @@ class Grid:
         valid = True
         for row in range(self.h):
             for column in range(self.w):
-                if self.get_cell_value(row, column) == 0 and self.get_candidates_for_cell(row, column) == 0:
+                if self.get_cell_value(row, column) == 0 and not self.get_candidates_for_cell(row, column):
                     valid = False
                     break
         return valid

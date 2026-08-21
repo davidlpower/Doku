@@ -18,15 +18,15 @@ class NakedPair(Technique):
 
         return (row_changed | column_changed | box_changed, grid)
 
-    def _apply_naked_pair(self, grid: Grid, empty_cells: list[Cell]) -> tuple[bool, Grid]:
+    def _apply_naked_pair(self, grid: Grid, empty_cells: set[Cell]) -> tuple[bool, Grid]:
         changed = False
         cell_pairs = itertools.combinations(empty_cells, r=2)
 
         for c1, c2 in cell_pairs:
             if len(c1.candidates) == 2 and c1.candidates == c2.candidates:
                 naked_pair = c1.candidates
-                empty_cells = [c for c in empty_cells if c is not c1 and c is not c2]
-                matches = [ec for ec in empty_cells if naked_pair.intersection(grid.get_candidates_for_cell(ec.row, ec.column))]
+                empty_cells = {c for c in empty_cells if c is not c1 and c is not c2}
+                matches = {ec for ec in empty_cells if naked_pair.intersection(grid.get_candidates_for_cell(ec.row, ec.column))}
                 if matches:
                     for match in matches:
                         # Did something actually happen here?
