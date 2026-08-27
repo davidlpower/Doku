@@ -8,6 +8,7 @@ from doku.grid import Grid
 from doku.techniques.hidden_single import HiddenSingle
 from doku.techniques.naked_pair import NakedPair
 from doku.techniques.naked_single import NakedSingle
+from doku.techniques.naked_triple import NakedTriple
 from doku.telemetry import append_to_log, load_history, new_telemetry
 
 
@@ -25,7 +26,7 @@ def main(argv: list[str] | None = None) -> None:
 
     telemetry = new_telemetry(args.path)
 
-    techniques = [NakedSingle(), HiddenSingle(), NakedPair()]
+    techniques = [NakedSingle(), HiddenSingle(), NakedPair(), NakedTriple()]
 
     # stack holds grid "branches" to try. Starts with just the original grid.
     # Backtracking guesses get pushed here as new branches to explore later.
