@@ -78,11 +78,11 @@ uv run ruff check . --fix && uv run ruff format . && uv run mypy --strict src/ &
 
 ## Milestones
 
-1. **M1 — Grid + I/O**: data model, parsing from string/file, pretty-printing.
-2. **M2 — Naked/hidden singles + backtracking fallback**: fully working end-to-end solver.
-3. **M3 — Pairs/triples + pointing pairs**: reduces reliance on backtracking for medium puzzles.
-4. **M4 — X-Wing and difficulty rating**: solves hard puzzles logically; rating output.
-5. **M5 — CLI polish + benchmark suite**: usable tool, performance baseline established.
+1. **M1: Grid + I/O**: data model, parsing from string/file, pretty-printing.
+2. **M2: Naked/hidden singles + backtracking fallback**: fully working end-to-end solver.
+3. **M3: Pairs/triples + pointing pairs**: reduces reliance on backtracking for medium puzzles.
+4. **M4: X-Wing and difficulty rating**: solves hard puzzles logically; rating output.
+5. **M5: CLI polish + benchmark**: usable tool, performance baseline established.
 
 # Techniques:
 
