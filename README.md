@@ -25,9 +25,6 @@ Applied repeatedly, in increasing order of complexity, until no technique makes 
 1. Naked singles
 2. Hidden singles
 3. Naked pairs / triples
-4. Pointing pairs (box–line reduction)
-5. X-Wing
-6. (Stretch) Swordfish, XY-Wing
 
 ### Stage 2 — Backtracking Search
 
@@ -37,16 +34,13 @@ Triggered only if Stage 1 stalls with the puzzle unsolved:
 - Try each candidate; after placing it, re-run Stage 1's propagation on the resulting grid before recursing (pruning the search space rather than doing naive brute force).
 - On contradiction, backtrack.
 
-### Bonus — Difficulty Rating (derived, not a separate solve)
+### Stage 3 - Advanced Techniques
 
-Based on the techniques actually needed to reach a solution:
+4. Pointing pairs (box–line reduction)
+5. X-Wing
+6. (Stretch) Swordfish, XY-Wing
 
-- **Easy** — singles only.
-- **Medium** — + pairs/triples, pointing pairs.
-- **Hard** — + X-Wing or similar.
-- **Expert/Extreme** — backtracking required at all.
-
-## Tech Stack
+## Stack
 
 - **uv** for environment/dependency management
 ```bash
@@ -68,11 +62,10 @@ uv run mypy --strict src/
 ```
 - **pytest** for testing, including:
   - Unit tests per technique (hand-crafted grids isolating one pattern)
-  - Integration tests against known puzzle sets of varying difficulty
-  - Property-based tests (optional, via `hypothesis`) — e.g. "solved grid always satisfies all unit constraints"
+  - Property-based tests
 
 
-### Possible Pre-Commit 
+### Pre-Commit 
 ```bash
 uv run ruff check . --fix && uv run ruff format . && uv run mypy --strict src/ && uv run pytest
 ```
@@ -81,8 +74,7 @@ uv run ruff check . --fix && uv run ruff format . && uv run mypy --strict src/ &
 
 - **Correctness**: every solved output must satisfy Sudoku constraints (`is_valid_solution(grid)`).
 - **Technique isolation**: fixtures constructed so only technique X can fire, to verify each technique independently.
-- **Difficulty regression**: a fixed set of puzzles with known human-assigned difficulty, checked against the solver's derived rating.
-- **Performance**: track backtracking node count / wall-clock time on a "hardest known" puzzle (e.g. Arto Inkala's 2012 puzzle) as a benchmark.
+- **Performance**: track backtracking node count
 
 ## Milestones
 
